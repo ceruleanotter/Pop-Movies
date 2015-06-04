@@ -8,6 +8,8 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 /**
  * Created by lyla on 6/4/15.
  */
@@ -15,8 +17,13 @@ public class PopularMoviesAdapter extends BaseAdapter {
     private Context mContext;
 
 
+
+    private ArrayList<PopMovie> mData;
+
+
     public PopularMoviesAdapter(Context c) {
         mContext = c;
+        mData = null;
     }
 
     @Override
@@ -37,6 +44,8 @@ public class PopularMoviesAdapter extends BaseAdapter {
     @Override
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
+
+
         PopularMoviesImageView imageView;
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
@@ -47,12 +56,22 @@ public class PopularMoviesAdapter extends BaseAdapter {
         } else {
             imageView = (PopularMoviesImageView) convertView;
         }
-        Picasso.with(mContext).load("http://i.imgur.com/DvpvklR.png").into(imageView);
+
+        if (mData != null && position < mData.size()) {
+            PopMovie currentData = mData.get(position);
+            Picasso.with(mContext).load(currentData.getmImageURL()).into(imageView);
+        } else {
+            //THIS IS A PROBLEM
+        }
 
         //imageView.setImageResource(mThumbIds[position]);
         return imageView;
     }
 
+    public void setmData(ArrayList<PopMovie> mData) {
+        this.mData = mData;
+        this.notifyDataSetChanged();
+    }
 
     // references to our images
     private Integer[] mThumbIds = {
