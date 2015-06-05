@@ -73,6 +73,10 @@ public class PopularMoviesAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
+    public ArrayList<PopMovie> getmData() {
+        return mData;
+    }
+
     // references to our images
     private Integer[] mThumbIds = {
             R.drawable.sample_2, R.drawable.sample_3,

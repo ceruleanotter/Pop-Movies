@@ -41,13 +41,7 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
         mMoviesAdapter = new PopularMoviesAdapter(getActivity());
         mGridView.setAdapter(mMoviesAdapter);
 
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(getActivity(), "" + position,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+
         getLoaderManager().initLoader(MOVIES_LOADER, null, this);
 
      return rootView;
@@ -65,6 +59,16 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
         if (data == null)
             return;
         mMoviesAdapter.setmData(data);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                String infos = "";
+                PopMovie movie = mMoviesAdapter.getmData().get(position);
+                infos = "Title: " + movie.getmTitle() + "\t runtime: " + movie.getmRuntime();
+                Toast.makeText(getActivity(), infos,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

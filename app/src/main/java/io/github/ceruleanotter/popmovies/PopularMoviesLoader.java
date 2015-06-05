@@ -30,15 +30,17 @@ public class PopularMoviesLoader extends AsyncTaskLoader<ArrayList<PopMovie>> {
     @Override
     public ArrayList<PopMovie> loadInBackground() {
 
-        URL movieUrl = MovieDataParsingUtilities.getUrlForNewMovies();
-        String moviesJSON = getJSONFromWeb(movieUrl);
+        URL newMoviesUrl = MovieDataParsingUtilities.getUrlForNewMovies();
+        String moviesJSON = getJSONFromWeb(newMoviesUrl);
         ArrayList<PopMovie> toReturn = null;
         try {
             toReturn = MovieDataParsingUtilities.getParsedMovieDiscoveryJSONData(moviesJSON);
             for (int i = 0; i < toReturn.size(); i++) {
                 PopMovie currentMovie = toReturn.get(i);
-
-
+                int id = currentMovie.getmId();
+                URL movieURL = MovieDataParsingUtilities.getUrlForSpecificMovie(id);
+                String movieJSON = getJSONFromWeb(movieURL);
+                MovieDataParsingUtilities.updateMovieFromJson(currentMovie,movieJSON);
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);

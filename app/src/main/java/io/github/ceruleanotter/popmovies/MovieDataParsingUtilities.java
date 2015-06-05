@@ -27,8 +27,9 @@ public class MovieDataParsingUtilities {
 
     // URL related constants
     //http://api.themoviedb.org/3/discover/movie?api_key=3062e696db60daf1cebee8178aa5f103
-    final private static String MOVIE_BASE_URL =
-            "http://api.themoviedb.org/3/discover/movie?";
+    final private static String MOVIE_URL_BASE = "http://api.themoviedb.org/3";
+    final private static String NEW_MOVIE_BASE_URL = MOVIE_URL_BASE + "/discover/movie?";
+    final private static String SINGLE_MOVIE_BASE_URL = MOVIE_URL_BASE + "/movie/";
     final private static String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w342";
 
     final private static String API_KEY = "3062e696db60daf1cebee8178aa5f103";
@@ -50,7 +51,7 @@ public class MovieDataParsingUtilities {
 
 
     public static URL getUrlForNewMovies(){
-        Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+        Uri builtUri = Uri.parse(NEW_MOVIE_BASE_URL).buildUpon()
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .build();
 
@@ -64,6 +65,21 @@ public class MovieDataParsingUtilities {
         return url;
     }
 
+
+    public static URL getUrlForSpecificMovie(int id){
+        Uri builtUri = Uri.parse(SINGLE_MOVIE_BASE_URL + id).buildUpon()
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+        }
+        return url;
+    }
 
     public static ArrayList<PopMovie> getParsedMovieDiscoveryJSONData(String json) throws JSONException {
         ArrayList<PopMovie> listOfMovies = new ArrayList<PopMovie>();
@@ -107,7 +123,8 @@ public class MovieDataParsingUtilities {
     public static void updateMovieFromJson(PopMovie movie, String json) {
         try {
             JSONObject movieJson = new JSONObject(json);
-            String runtime = movieJson.getString(RUNTIME_JSON);
+            int runtime = movieJson.getInt(RUNTIME_JSON);
+            movie.setmRuntime(runtime);
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
