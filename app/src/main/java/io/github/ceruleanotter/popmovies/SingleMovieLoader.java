@@ -1,54 +1,47 @@
 package io.github.ceruleanotter.popmovies;
 
-import android.content.Context;
+/**
+ * Created by lyla on 6/5/15.
+ */
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
-import org.json.JSONException;
-
 import java.net.URL;
-import java.util.ArrayList;
 
 /**
  * Created by lyla on 6/4/15.
  */
-public class PopularMoviesLoader extends AsyncTaskLoader<ArrayList<PopMovie>> {
-    public final static String LOG_TAG = PopularMoviesLoader.class.getSimpleName();
+public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
+    public final static String LOG_TAG = SingleMovieLoader.class.getSimpleName();
     //From this example http://stackoverflow.com/questions/20279216/asynctaskloader-basic-example-android
-    ArrayList<PopMovie> mData;
+    PopMovie mData;
+    int mId;
 
 
-    public PopularMoviesLoader(Context context) {
-        super(context);
+    public SingleMovieLoader(MovieDetailFragment df) {
+        super(df.getActivity());
+        mId = df.getmID();
     }
 
     @Override
-    public ArrayList<PopMovie> loadInBackground() {
+    public PopMovie loadInBackground() {
 
         URL newMoviesUrl = MovieDataParsingUtilities.getUrlForNewMovies(getContext());
         Log.e(LOG_TAG, "Starting load for " + newMoviesUrl.toString());
-        String moviesJSON = MovieDataParsingUtilities.getJSONFromWeb(newMoviesUrl);
-        ArrayList<PopMovie> toReturn = null;
-        try {
-            toReturn = MovieDataParsingUtilities.getParsedMovieDiscoveryJSONData(moviesJSON);
-            Log.e(LOG_TAG, "Size of new array list is  " + toReturn);
-           /* for (int i = 0; i < toReturn.size(); i++) {
-                PopMovie currentMovie = toReturn.get(i);
-                int id = currentMovie.getmId();
-                URL movieURL = MovieDataParsingUtilities.getUrlForSpecificMovie(id);
-                Log.e(LOG_TAG, "Starting load for " + currentMovie.getmTitle() + "\n" + movieURL.toString());
-                String movieJSON = MovieDataParsingUtilities.getJSONFromWeb(movieURL);
-                MovieDataParsingUtilities.updateMovieFromJson(currentMovie,movieJSON);
-            }*/
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
-        }
+        PopMovie toReturn = null;
+
+            URL movieURL = MovieDataParsingUtilities.getUrlForSpecificMovie(mId);
+            //Log.e(LOG_TAG, "Starting load for " + currentMovie.getmTitle() + "\n" + movieURL.toString());
+            String movieJSON = MovieDataParsingUtilities.getJSONFromWeb(movieURL);
+            toReturn = MovieDataParsingUtilities.movieFromJson(movieJSON);
+
+
+
         return toReturn;
     }
 
     @Override
-    public void deliverResult(final ArrayList<PopMovie> data) {
+    public void deliverResult(final PopMovie data) {
         //Log.d("AppLog", "deliverResult");
         if (isReset()) {
             // An async query came in while the loader is stopped.  We don't need the result.
@@ -56,7 +49,7 @@ public class PopularMoviesLoader extends AsyncTaskLoader<ArrayList<PopMovie>> {
                 onReleaseResources(data);
             }
         }
-        ArrayList<PopMovie> oldData = mData;
+        PopMovie oldData = mData;
         mData = data;
 
         if (isStarted()) {
@@ -100,7 +93,7 @@ public class PopularMoviesLoader extends AsyncTaskLoader<ArrayList<PopMovie>> {
     }
 
     @Override
-    public void onCanceled(ArrayList<PopMovie> data) {
+    public void onCanceled(PopMovie data) {
         super.onCanceled(data);
         //        Log.d("AppLog", "onCanceled:" + data);
         // At this point we can release the resources associated with 'data' if needed.
@@ -120,7 +113,7 @@ public class PopularMoviesLoader extends AsyncTaskLoader<ArrayList<PopMovie>> {
         }
     }
 
-    protected void onReleaseResources(ArrayList<PopMovie> data) {
+    protected void onReleaseResources(PopMovie data) {
         //        Log.d("AppLog", "onReleaseResources");
         //  nothing to do.
     }

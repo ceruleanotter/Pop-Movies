@@ -52,6 +52,7 @@ public class PopularMovies extends AppCompatActivity {
         if (!(sortByNow.equals(mCurrentSortBy)) || !(kidsByNow == mCurrentKidsMode)) {
             ((PopularMoviesFragment)getSupportFragmentManager().findFragmentById(R.id.fragment)).onSettingsChange();
             mCurrentSortBy = sortByNow;
+            mCurrentKidsMode = kidsByNow;
         }
     }
 }

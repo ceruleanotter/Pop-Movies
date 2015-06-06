@@ -6,6 +6,7 @@ import java.util.Date;
  * Created by lyla on 6/4/15.
  */
 public class PopMovie {
+
     private String mImageURL;
 
     private String mTitle;
@@ -16,13 +17,19 @@ public class PopMovie {
     private double mRating;
     private int mId;
 
-    public PopMovie(String mImageURL, String mTitle, String mPlot, Date mReleaseDate, double mRating, int mId) {
+    public PopMovie(String mImageURL, String mTitle, String mPlot, int mRuntime, Date mReleaseDate, double mRating, int mId) {
         this.mImageURL = mImageURL;
         this.mTitle = mTitle;
         this.mPlot = mPlot;
+        this.mRuntime = mRuntime;
         this.mReleaseDate = mReleaseDate;
         this.mRating = mRating;
         this.mId = mId;
+    }
+
+    public PopMovie(int mId, String mImageURL) {
+        this.mId = mId;
+        this.mImageURL = mImageURL;
     }
 
     public String getmImageURL() {

@@ -1,5 +1,6 @@
 package io.github.ceruleanotter.popmovies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -62,11 +62,16 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                String infos = "";
+                /*String infos = "";
                 PopMovie movie = mMoviesAdapter.getmData().get(position);
                 infos = "Title: " + movie.getmTitle() + "\t runtime: " + movie.getmRuntime();
                 Toast.makeText(getActivity(), infos,
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();*/
+                Intent intent = new Intent(getActivity(), MovieDetail.class);
+                intent.putExtra(MovieDetailFragment.ID_EXTRA,
+                        mMoviesAdapter.getmData().get(position).getmId());
+                        //.setData(contentUri);
+                startActivity(intent);
             }
         });
     }

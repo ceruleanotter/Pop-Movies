@@ -10,6 +10,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
@@ -59,10 +64,7 @@ public class MovieDataParsingUtilities {
     final private static String ID_JSON = "id";
 
 
-
-
-
-    public static URL getUrlForNewMovies(Context c){
+    public static URL getUrlForNewMovies(Context c) {
 
 
         String sortByParamValue;
@@ -92,7 +94,7 @@ public class MovieDataParsingUtilities {
 
         if (kidsMode) {
             b.appendQueryParameter(CERT_COUNTRY_PARAM, KIDS_MODE_COUNTRY)
-            .appendQueryParameter(CERTIFICATION_LEVEL_PARAM, KIDS_MODE_LEVEL);
+                    .appendQueryParameter(CERTIFICATION_LEVEL_PARAM, KIDS_MODE_LEVEL);
         }
 
         Uri builtUri = b.build();
@@ -109,7 +111,7 @@ public class MovieDataParsingUtilities {
     }
 
 
-    public static URL getUrlForSpecificMovie(int id){
+    public static URL getUrlForSpecificMovie(int id) {
         Uri builtUri = Uri.parse(SINGLE_MOVIE_BASE_URL + id).buildUpon()
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .build();
@@ -131,15 +133,15 @@ public class MovieDataParsingUtilities {
             JSONObject moviesJson = new JSONObject(json);
             JSONArray results = moviesJson.getJSONArray(RESULTS_JSON);
 
-            for(int i = 0 ; i < results.length(); i++ ) {
+            for (int i = 0; i < results.length(); i++) {
                 JSONObject currentMovie = results.getJSONObject(i);
-                String title = currentMovie.getString(TITLE_JSON);
+                /*String title = currentMovie.getString(TITLE_JSON);
                 String plot = currentMovie.getString(PLOT_JSON);
 
-                double userRating = currentMovie.getDouble(USER_RATING_JSON);
+                double userRating = currentMovie.getDouble(USER_RATING_JSON);*/
                 int id = currentMovie.getInt(ID_JSON);
 
-                Date releaseDate = null;
+               /* Date releaseDate = null;
 
                 DateFormat formatter = new SimpleDateFormat("yyyy-MM-d");
                 try {
@@ -147,12 +149,12 @@ public class MovieDataParsingUtilities {
                 } catch (ParseException e) {
                     Log.e(LOG_TAG, e.getMessage(), e);
                     e.printStackTrace();
-                }
+                }*/
 
                 String imageURL = currentMovie.getString(POSTER_IMAGE_JSON);
                 imageURL = POSTER_BASE_URL + imageURL;
 
-                listOfMovies.add(new PopMovie(imageURL, title, plot, releaseDate,userRating,id));
+                listOfMovies.add(new PopMovie(id, imageURL));
             }
 
         } catch (JSONException e) {
@@ -160,18 +162,100 @@ public class MovieDataParsingUtilities {
             e.printStackTrace();
         }
 
-            return listOfMovies;
+        return listOfMovies;
     }
 
-    public static void updateMovieFromJson(PopMovie movie, String json) {
+
+    public static PopMovie movieFromJson(String movieJSON) {
         try {
-            JSONObject movieJson = new JSONObject(json);
-            int runtime = movieJson.getInt(RUNTIME_JSON);
-            movie.setmRuntime(runtime);
+            JSONObject currentMovie = new JSONObject(movieJSON);
+            int runtime = currentMovie.getInt(RUNTIME_JSON);
+
+            String title = currentMovie.getString(TITLE_JSON);
+            String plot = currentMovie.getString(PLOT_JSON);
+
+            double userRating = currentMovie.getDouble(USER_RATING_JSON);
+            int id = currentMovie.getInt(ID_JSON);
+
+            Date releaseDate = null;
+
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-d");
+            try {
+                releaseDate = formatter.parse(currentMovie.getString(RELEASE_DATE_JSON));
+            } catch (ParseException e) {
+                Log.e(LOG_TAG, e.getMessage(), e);
+                e.printStackTrace();
+            }
+
+            String imageURL = currentMovie.getString(POSTER_IMAGE_JSON);
+            imageURL = POSTER_BASE_URL + imageURL;
+
+            return new PopMovie(imageURL, title, plot, runtime, releaseDate, userRating, id);
+
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
+        return null;
+    }
+
+
+    public static String getJSONFromWeb(URL url) {
+        // These two need to be declared outside the try/catch
+        // so that they can be closed in the finally block.
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+
+        String moviesJSON = "";
+
+        try {
+            // Create the request to OpenWeatherMap, and open the connection
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            // Read the input stream into a String
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null) {
+                // Nothing to do.
+                return "";
+            }
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                buffer.append(line + "\n");
+            }
+
+            if (buffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return "";
+            }
+            moviesJSON = buffer.toString();
+            return moviesJSON;
+
+
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Error ", e);
+            // If the code didn't successfully get the weather data, there's no point in attempting
+            // to parse it.
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    Log.e(LOG_TAG, "Error closing stream", e);
+                }
+            }
+        }
+        return "";
     }
 
     public static String getSortByPreference(Context c) {
@@ -185,4 +269,6 @@ public class MovieDataParsingUtilities {
         boolean kidsmode = sharedPref.getBoolean(c.getString(R.string.pref_kids_mode_key), false);
         return kidsmode;
     }
+
+
 }
