@@ -75,4 +75,8 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
     public void onLoaderReset(Loader<ArrayList<PopMovie>> loader) {
 
     }
+
+    public void onSettingsChange() {
+        getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
+    }
 }

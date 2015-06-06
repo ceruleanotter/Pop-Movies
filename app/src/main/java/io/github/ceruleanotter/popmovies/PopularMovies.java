@@ -9,11 +9,15 @@ import android.view.MenuItem;
 
 public class PopularMovies extends AppCompatActivity {
 
+    String mCurrentSortBy;
+    boolean mCurrentKidsMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mCurrentSortBy = MovieDataParsingUtilities.getSortByPreference(this);
+        mCurrentKidsMode = MovieDataParsingUtilities.getKidsModePreference(this);
         setContentView(R.layout.activity_popular_movies);
-
     }
 
 
@@ -38,5 +42,16 @@ public class PopularMovies extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String sortByNow = MovieDataParsingUtilities.getSortByPreference(this);
+        boolean kidsByNow = MovieDataParsingUtilities.getKidsModePreference(this);
+        if (!(sortByNow.equals(mCurrentSortBy)) || !(kidsByNow == mCurrentKidsMode)) {
+            ((PopularMoviesFragment)getSupportFragmentManager().findFragmentById(R.id.fragment)).onSettingsChange();
+            mCurrentSortBy = sortByNow;
+        }
     }
 }

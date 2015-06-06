@@ -1,6 +1,9 @@
 package io.github.ceruleanotter.popmovies;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -20,11 +23,6 @@ import java.util.Date;
  */
 public class MovieDataParsingUtilities {
     public final static String LOG_TAG = MovieDataParsingUtilities.class.getSimpleName();
-
-
-
-
-
     // URL related constants
     //http://api.themoviedb.org/3/discover/movie?api_key=3062e696db60daf1cebee8178aa5f103
     final private static String MOVIE_URL_BASE = "http://api.themoviedb.org/3";
@@ -35,6 +33,19 @@ public class MovieDataParsingUtilities {
     final private static String API_KEY = "3062e696db60daf1cebee8178aa5f103";
 
     final private static String API_KEY_PARAM = "api_key";
+    final private static String SORT_BY_PARAM = "sort_by";
+    final private static String CERT_COUNTRY_PARAM = "certification_country";
+    final private static String CERTIFICATION_LEVEL_PARAM = "certification.lte";
+
+
+    //public sort by options
+    final public static String SORT_BY_POPULAR = "popularity.desc";
+    final public static String SORT_BY_RELEASE = "release_date.desc";
+    final public static String SORT_BY_RATING = "vote_average.desc";
+
+    //kids mode settings
+    final public static String KIDS_MODE_COUNTRY = "US";
+    final public static String KIDS_MODE_LEVEL = "PG";
 
     //JSON related constants
     final private static String RESULTS_JSON = "results";
@@ -50,10 +61,42 @@ public class MovieDataParsingUtilities {
 
 
 
-    public static URL getUrlForNewMovies(){
-        Uri builtUri = Uri.parse(NEW_MOVIE_BASE_URL).buildUpon()
+
+    public static URL getUrlForNewMovies(Context c){
+
+
+        String sortByParamValue;
+        String sortBy = getSortByPreference(c);
+        boolean kidsMode = getKidsModePreference(c);
+
+        //wish there was some way to associate with the array in strings_activity_settings itself
+        switch (sortBy) {
+            case "0":
+                sortByParamValue = SORT_BY_POPULAR;
+                break;
+            case "1":
+                sortByParamValue = SORT_BY_RELEASE;
+                break;
+            case "2":
+                sortByParamValue = SORT_BY_RATING;
+                break;
+            default:
+                Log.e(LOG_TAG, "Shared pref returned something that wasn't 0, 1 or 2");
+                sortByParamValue = SORT_BY_POPULAR;
+                break;
+        }
+
+        Uri.Builder b = Uri.parse(NEW_MOVIE_BASE_URL).buildUpon()
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
-                .build();
+                .appendQueryParameter(SORT_BY_PARAM, sortByParamValue);
+
+        if (kidsMode) {
+            b.appendQueryParameter(CERT_COUNTRY_PARAM, KIDS_MODE_COUNTRY)
+            .appendQueryParameter(CERTIFICATION_LEVEL_PARAM, KIDS_MODE_LEVEL);
+        }
+
+        Uri builtUri = b.build();
+
 
         URL url = null;
         try {
@@ -131,4 +174,15 @@ public class MovieDataParsingUtilities {
         }
     }
 
+    public static String getSortByPreference(Context c) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
+        String sortBy = sharedPref.getString(c.getString(R.string.pref_sort_by_key), "failsauce");
+        return sortBy;
+    }
+
+    public static boolean getKidsModePreference(Context c) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
+        boolean kidsmode = sharedPref.getBoolean(c.getString(R.string.pref_kids_mode_key), false);
+        return kidsmode;
+    }
 }
