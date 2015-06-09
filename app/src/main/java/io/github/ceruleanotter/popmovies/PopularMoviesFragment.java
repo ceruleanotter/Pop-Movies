@@ -8,6 +8,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
@@ -22,7 +23,8 @@ import butterknife.InjectView;
  */
 public class PopularMoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<PopMovie>> {
     //Using ButterKnife's injection capabilities to get the view
-    @InjectView(R.id.gridview_movies) GridView mGridView;
+    @InjectView(R.id.gridview_movies)
+    GridView mGridView;
     PopularMoviesAdapter mMoviesAdapter;
     private static final int MOVIES_LOADER = 0;
 
@@ -33,19 +35,49 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_popular_movies, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_popular_movies, container, false);
 
         //For ButterKnife view injection
         ButterKnife.inject(this, rootView);
 
         mMoviesAdapter = new PopularMoviesAdapter(getActivity());
-        mGridView.setAdapter(mMoviesAdapter);
+        final ViewTreeObserver vto = mGridView.getViewTreeObserver();
+        //This code is from:
+        //Added it because I was running in to an issue on rotation where I was getting super strange
+        //behavior (views weren't appearing, things would get into an error state). I think it was
+        // because the inital load time allowed for the grid view to be measured, whereas when
+        // the screen was rotated, the gridview returned a height and width of 0 which really messed
+        // up sizing calculations for the posters.
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                if (mGridView.getWidth() > 10) { // because it may be called before the view is measured and you will still get 0
+                    // here you can get the measured dimensions
+
+                    mGridView.setAdapter(mMoviesAdapter);
+                    // mMoviesAdapter.notifyDataSetChanged();
+                    mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        public void onItemClick(AdapterView<?> parent, View v,
+                                                int position, long id) {
+
+                            Intent intent = new Intent(getActivity(), MovieDetail.class);
+                            intent.putExtra(MovieDetailFragment.ID_EXTRA,
+                                    mMoviesAdapter.getmData().get(position).getmId());
+
+                            startActivity(intent);
+                        }
+                    });
+                    ViewTreeObserver obs = mGridView.getViewTreeObserver();
+                    obs.removeGlobalOnLayoutListener(this); // otherwise you're gonne keep getting called
+                }
+            }
+        });
 
 
-        getLoaderManager().initLoader(MOVIES_LOADER, null, this);
-
-     return rootView;
+        return rootView;
     }
+
 
     @Override
     public Loader<ArrayList<PopMovie>> onCreateLoader(int id, Bundle args) {
@@ -70,7 +102,7 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
                 Intent intent = new Intent(getActivity(), MovieDetail.class);
                 intent.putExtra(MovieDetailFragment.ID_EXTRA,
                         mMoviesAdapter.getmData().get(position).getmId());
-                        //.setData(contentUri);
+                //.setData(contentUri);
                 startActivity(intent);
             }
         });
@@ -79,6 +111,12 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<ArrayList<PopMovie>> loader) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().initLoader(MOVIES_LOADER, null, this);
     }
 
     public void onSettingsChange() {
