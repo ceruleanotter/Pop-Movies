@@ -83,7 +83,7 @@ public class MovieDataParsingUtilities {
                 sortByParamValue = SORT_BY_RATING;
                 break;
             default:
-                Log.e(LOG_TAG, "Shared pref returned something that wasn't 0, 1 or 2");
+                Log.e(LOG_TAG, "Shared pref returned something that wasn't 0, 1 or 2, it was " + sortBy);
                 sortByParamValue = SORT_BY_POPULAR;
                 break;
         }

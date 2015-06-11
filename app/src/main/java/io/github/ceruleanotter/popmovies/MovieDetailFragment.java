@@ -7,7 +7,13 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.text.SimpleDateFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -21,7 +27,12 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     int mID;
     public final static String ID_EXTRA = "id_extra";
     private static final int MOVIE_LOADER = 1;
-    @InjectView(R.id.movie_text_view) TextView mMovieTextView;
+    @InjectView(R.id.title) TextView mTitleTextView;
+    @InjectView(R.id.release_date) TextView mReleaseDateTextView;
+    @InjectView(R.id.runtime) TextView mRunTimeTextView;
+    @InjectView(R.id.plot) TextView mPlotTextView;
+    @InjectView(R.id.poster) ImageView mPosterImageView;
+    @InjectView(R.id.rating) RatingBar mRatingRatingBar;
 
 
     public MovieDetailFragment() {
@@ -48,8 +59,16 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public void onLoadFinished(Loader<PopMovie> loader, PopMovie data) {
         if (data == null)
             return;
-        mMovieTextView.setText("TITLE: " + data.getmTitle() +
-                "\n PLOT: " + data.getmPlot() );
+        mTitleTextView.setText(data.getmTitle());
+        mPlotTextView.setText(data.getmPlot());
+        SimpleDateFormat df = new SimpleDateFormat("yyyy");
+        String year = df.format(data.getmReleaseDate());
+        mReleaseDateTextView.setText(year);
+        mRunTimeTextView.setText(data.getmRuntime()+"min");
+        mRatingRatingBar.setRating((float)data.getmRating()/2);
+        Picasso.with(getActivity()).load(data.getmImageURL()).into(mPosterImageView);
+//        //mMovieTextView.setText("TITLE: " + data.getmTitle() +
+//                "\n PLOT: " + data.getmPlot() );
 
     }
 

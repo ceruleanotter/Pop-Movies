@@ -42,12 +42,14 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
 
         mMoviesAdapter = new PopularMoviesAdapter(getActivity());
         final ViewTreeObserver vto = mGridView.getViewTreeObserver();
-        //This code is from:
-        //Added it because I was running in to an issue on rotation where I was getting super strange
-        //behavior (views weren't appearing, things would get into an error state). I think it was
+        // This code is from:
+        // Added it because I was running in to an issue on rotation where I was getting super strange
+        // behavior (views weren't appearing, things would get into an error state). I think it was
         // because the inital load time allowed for the grid view to be measured, whereas when
         // the screen was rotated, the gridview returned a height and width of 0 which really messed
         // up sizing calculations for the posters.
+
+        // This code wait
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
             @Override
@@ -69,7 +71,7 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
                         }
                     });
                     ViewTreeObserver obs = mGridView.getViewTreeObserver();
-                    obs.removeGlobalOnLayoutListener(this); // otherwise you're gonne keep getting called
+                    obs.removeOnGlobalLayoutListener(this); // otherwise you're gonne keep getting called
                 }
             }
         });
