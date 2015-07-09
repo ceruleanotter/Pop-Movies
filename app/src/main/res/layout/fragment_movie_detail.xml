@@ -6,23 +6,10 @@
     android:orientation="vertical"
     tools:context="io.github.ceruleanotter.popmovies.MovieDetailFragment">
 
-    <TextView
-        android:id="@+id/title"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="#009688"
-
-        android:elevation="5dp"
-        android:fontFamily="sans-serif"
-        android:paddingBottom="32dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="24dp"
-        android:text="Mad Max Fury Road"
-        android:textColor="#ffffff"
-        android:textSize="45sp" />
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:id="@+id/backdrop"/>
 
 <ScrollView
     android:layout_width="match_parent"
@@ -32,6 +19,23 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/title"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#009688"
+
+            android:elevation="5dp"
+            android:fontFamily="sans-serif"
+            android:paddingBottom="32dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="24dp"
+            android:text="Mad Max Fury Road"
+            android:textColor="#ffffff"
+            android:textSize="24sp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

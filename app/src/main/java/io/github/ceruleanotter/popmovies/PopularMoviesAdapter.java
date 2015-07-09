@@ -71,11 +71,11 @@ public class PopularMoviesAdapter extends BaseAdapter {
             //imageView.setLayoutParams(new GridView.LayoutParams(150, 150));
             GridView gv = (GridView) parent;
             GridView.LayoutParams params = new GridView.LayoutParams(
-                    GridView.LayoutParams.WRAP_CONTENT,
-                    GridView.LayoutParams.WRAP_CONTENT);
-            params.width = (parent.getWidth()/gv.getNumColumns());
+                    GridView.LayoutParams.MATCH_PARENT,
+                    GridView.LayoutParams.MATCH_PARENT);
+            /*params.width = (parent.getWidth()/gv.getNumColumns());
             params.height = (int)Math.round(params.width*1.5);
-            imageView.setLayoutParams(params);
+            imageView.setLayoutParams(params);*/
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(0, 0, 0, 0);
         } else {

@@ -34,6 +34,7 @@ public class MovieDataParsingUtilities {
     final private static String NEW_MOVIE_BASE_URL = MOVIE_URL_BASE + "/discover/movie?";
     final private static String SINGLE_MOVIE_BASE_URL = MOVIE_URL_BASE + "/movie/";
     final private static String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w342";
+    final private static String BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w500";
 
     final private static String API_KEY = "3062e696db60daf1cebee8178aa5f103";
 
@@ -55,6 +56,7 @@ public class MovieDataParsingUtilities {
     //JSON related constants
     final private static String RESULTS_JSON = "results";
     final private static String POSTER_IMAGE_JSON = "poster_path";
+    final private static String BACKDROP_IMAGE_JSON = "backdrop_path";
     final private static String TITLE_JSON = "original_title";
     final private static String PLOT_JSON = "overview";
     final private static String RUNTIME_JSON = "runtime";
@@ -190,7 +192,10 @@ public class MovieDataParsingUtilities {
             String imageURL = currentMovie.getString(POSTER_IMAGE_JSON);
             imageURL = POSTER_BASE_URL + imageURL;
 
-            return new PopMovie(imageURL, title, plot, runtime, releaseDate, userRating, id);
+            String backdropURL = currentMovie.getString(BACKDROP_IMAGE_JSON);
+            backdropURL = BACKDROP_BASE_URL + backdropURL;
+
+            return new PopMovie(backdropURL, imageURL, title, plot, runtime, releaseDate, userRating, id);
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);

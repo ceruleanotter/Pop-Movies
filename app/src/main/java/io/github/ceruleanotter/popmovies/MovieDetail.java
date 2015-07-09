@@ -1,12 +1,12 @@
 package io.github.ceruleanotter.popmovies;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MovieDetail extends ActionBarActivity {
+public class MovieDetail extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

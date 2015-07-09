@@ -32,6 +32,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @InjectView(R.id.runtime) TextView mRunTimeTextView;
     @InjectView(R.id.plot) TextView mPlotTextView;
     @InjectView(R.id.poster) ImageView mPosterImageView;
+    @InjectView(R.id.backdrop) ImageView mBackdropImageView;
     @InjectView(R.id.rating) RatingBar mRatingRatingBar;
 
 
@@ -60,13 +61,19 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         if (data == null)
             return;
         mTitleTextView.setText(data.getmTitle());
+
+
         mPlotTextView.setText(data.getmPlot());
         SimpleDateFormat df = new SimpleDateFormat("yyyy");
         String year = df.format(data.getmReleaseDate());
         mReleaseDateTextView.setText(year);
-        mRunTimeTextView.setText(data.getmRuntime()+"min");
-        mRatingRatingBar.setRating((float)data.getmRating()/2);
+        mRunTimeTextView.setText(data.getmRuntime() + "min");
+        mRatingRatingBar.setRating((float) data.getmRating() / 2);
         Picasso.with(getActivity()).load(data.getmImageURL()).into(mPosterImageView);
+        mBackdropImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Picasso.with(getActivity()).load(data.getmBackdropURL()).into(mBackdropImageView);
+
+
 //        //mMovieTextView.setText("TITLE: " + data.getmTitle() +
 //                "\n PLOT: " + data.getmPlot() );
 

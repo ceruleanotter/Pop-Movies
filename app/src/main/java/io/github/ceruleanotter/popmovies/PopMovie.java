@@ -8,6 +8,7 @@ import java.util.Date;
 public class PopMovie {
 
     private String mImageURL;
+    private String mBackdropURL;
 
     private String mTitle;
     private String mPlot;
@@ -17,7 +18,8 @@ public class PopMovie {
     private double mRating;
     private int mId;
 
-    public PopMovie(String mImageURL, String mTitle, String mPlot, int mRuntime, Date mReleaseDate, double mRating, int mId) {
+    public PopMovie(String mBackdropURL, String mImageURL, String mTitle, String mPlot, int mRuntime, Date mReleaseDate, double mRating, int mId) {
+        this.mBackdropURL = mBackdropURL;
         this.mImageURL = mImageURL;
         this.mTitle = mTitle;
         this.mPlot = mPlot;
@@ -62,5 +64,9 @@ public class PopMovie {
 
     public void setmRuntime(int mRuntime) {
         this.mRuntime = mRuntime;
+    }
+
+    public String getmBackdropURL() {
+        return mBackdropURL;
     }
 }
