@@ -73,8 +73,8 @@ public class PopularMoviesAdapter extends BaseAdapter {
             GridView.LayoutParams params = new GridView.LayoutParams(
                     GridView.LayoutParams.MATCH_PARENT,
                     GridView.LayoutParams.MATCH_PARENT);
-            /*params.width = (parent.getWidth()/gv.getNumColumns());
-            params.height = (int)Math.round(params.width*1.5);*/
+            params.width = (parent.getWidth()/gv.getNumColumns());
+            params.height = (int)Math.round(params.width*1.5);
             imageView.setLayoutParams(params);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(0, 0, 0, 0);
