@@ -1,9 +1,13 @@
 package io.github.ceruleanotter.popmovies;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -74,6 +79,26 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         Picasso.with(getActivity()).load(data.getmBackdropURL()).into(mBackdropImageView);
 
 
+        Picasso.with(getActivity())
+                .load(data.getmBackdropURL())
+                .fit().centerCrop()
+                .transform(PaletteTransformation.instance())
+                .into(mBackdropImageView, new Callback.EmptyCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Bitmap bitmap = ((BitmapDrawable) mBackdropImageView.getDrawable()).getBitmap(); // Ew!
+                        Palette palette = PaletteTransformation.getPalette(bitmap);
+                        Palette.Swatch vibrantSwatch = palette.getDarkVibrantSwatch();
+                        if (vibrantSwatch != null) {
+                            float[] vibrant = vibrantSwatch.getHsl();
+                            mTitleTextView.setBackgroundColor(Color.HSVToColor(vibrant));
+                        }
+                        // TODO apply palette to text views, backgrounds, etc.
+                    }
+                });
+
+
+
 //        //mMovieTextView.setText("TITLE: " + data.getmTitle() +
 //                "\n PLOT: " + data.getmPlot() );
 
@@ -87,4 +112,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public int getmID() {
         return mID;
     }
+
+
+
 }
