@@ -32,13 +32,20 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     int mID;
     public final static String ID_EXTRA = "id_extra";
     private static final int MOVIE_LOADER = 1;
-    @InjectView(R.id.title) TextView mTitleTextView;
-    @InjectView(R.id.release_date) TextView mReleaseDateTextView;
-    @InjectView(R.id.runtime) TextView mRunTimeTextView;
-    @InjectView(R.id.plot) TextView mPlotTextView;
-    @InjectView(R.id.poster) ImageView mPosterImageView;
-    @InjectView(R.id.backdrop) ImageView mBackdropImageView;
-    @InjectView(R.id.rating) RatingBar mRatingRatingBar;
+    @InjectView(R.id.title)
+    TextView mTitleTextView;
+    @InjectView(R.id.release_date)
+    TextView mReleaseDateTextView;
+    @InjectView(R.id.runtime)
+    TextView mRunTimeTextView;
+    @InjectView(R.id.plot)
+    TextView mPlotTextView;
+    @InjectView(R.id.poster)
+    ImageView mPosterImageView;
+    @InjectView(R.id.backdrop)
+    ImageView mBackdropImageView;
+    @InjectView(R.id.rating)
+    RatingBar mRatingRatingBar;
 
 
     public MovieDetailFragment() {
@@ -49,7 +56,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-        mID =getActivity().getIntent().getIntExtra(ID_EXTRA, -1);
+        mID = getActivity().getIntent().getIntExtra(ID_EXTRA, -1);
         //For ButterKnife view injection
         ButterKnife.inject(this, rootView);
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
@@ -69,8 +76,16 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
 
         mPlotTextView.setText(data.getmPlot());
-        SimpleDateFormat df = new SimpleDateFormat("yyyy");
-        String year = df.format(data.getmReleaseDate());
+
+        String year = "Unknown year";
+
+
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy");
+            year = df.format(data.getmReleaseDate());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         mReleaseDateTextView.setText(year);
         mRunTimeTextView.setText(data.getmRuntime() + "min");
         mRatingRatingBar.setRating((float) data.getmRating() / 2);
@@ -93,14 +108,15 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                             float[] vibrant = vibrantSwatch.getHsl();
                             mTitleTextView.setBackgroundColor(Color.HSVToColor(vibrant));
                         }
+
                         // TODO apply palette to text views, backgrounds, etc.
                     }
+
                     @Override
                     public void onError() {
                         mBackdropImageView.setVisibility(View.GONE);
                     }
                 });
-
 
 
 //        //mMovieTextView.setText("TITLE: " + data.getmTitle() +
@@ -112,11 +128,10 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public void onLoaderReset(Loader<PopMovie> loader) {
 
     }
-    
+
     public int getmID() {
         return mID;
     }
-
 
 
 }

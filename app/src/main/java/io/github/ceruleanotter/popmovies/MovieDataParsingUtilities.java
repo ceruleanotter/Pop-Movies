@@ -196,6 +196,12 @@ public class MovieDataParsingUtilities {
             id = currentMovie.getInt(ID_JSON);
             title = currentMovie.getString(TITLE_JSON);
             plot = currentMovie.getString(PLOT_JSON);
+            imageURL = currentMovie.getString(POSTER_IMAGE_JSON);
+            imageURL = POSTER_BASE_URL + imageURL;
+
+            backdropURL = currentMovie.getString(BACKDROP_IMAGE_JSON);
+            backdropURL = BACKDROP_BASE_URL + backdropURL;
+
             userRating = currentMovie.getDouble(USER_RATING_JSON);
             runtime = currentMovie.getInt(RUNTIME_JSON);
 
@@ -207,11 +213,6 @@ public class MovieDataParsingUtilities {
                 e.printStackTrace();
             }
 
-            imageURL = currentMovie.getString(POSTER_IMAGE_JSON);
-            imageURL = POSTER_BASE_URL + imageURL;
-
-            backdropURL = currentMovie.getString(BACKDROP_IMAGE_JSON);
-            backdropURL = BACKDROP_BASE_URL + backdropURL;
 
             //return
 
