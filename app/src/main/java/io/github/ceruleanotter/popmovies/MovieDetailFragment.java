@@ -101,6 +101,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                 .into(mBackdropImageView, new Callback.EmptyCallback() {
                     @Override
                     public void onSuccess() {
+                        //Required for grabbing the palette color as per: http://jakewharton.com/coercing-picasso-to-play-with-palette/
                         Bitmap bitmap = ((BitmapDrawable) mBackdropImageView.getDrawable()).getBitmap(); // Ew!
                         Palette palette = PaletteTransformation.getPalette(bitmap);
                         Palette.Swatch vibrantSwatch = palette.getDarkVibrantSwatch();
@@ -109,7 +110,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                             mTitleTextView.setBackgroundColor(Color.HSVToColor(vibrant));
                         }
 
-                        // TODO apply palette to text views, backgrounds, etc.
                     }
 
                     @Override
@@ -117,11 +117,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                         mBackdropImageView.setVisibility(View.GONE);
                     }
                 });
-
-
-//        //mMovieTextView.setText("TITLE: " + data.getmTitle() +
-//                "\n PLOT: " + data.getmPlot() );
-
     }
 
     @Override

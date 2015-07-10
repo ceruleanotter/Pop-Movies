@@ -28,27 +28,14 @@ public class PopularMoviesAdapter extends BaseAdapter {
 
 
 
-    private ArrayList<PopMovie> mData;/* =  new ArrayList<PopMovie>() {{
-        add(new PopMovie("http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","intersetallar", "plot1",
-                20,new Date(), 4.5, 4000));
-        add(new PopMovie("http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","intersetallar", "plot2",
-                20,new Date(), 4.5, 4000));
-        add(new PopMovie("http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","intersetallar", "plot3",
-                20,new Date(), 4.5, 4000));
-        add(new PopMovie("http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","intersetallar", "plot4",
-                20,new Date(), 4.5, 4000));
-        add(new PopMovie("http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","intersetallar", "plot5",
-                20,new Date(), 4.5, 4000));
-        add(new PopMovie("http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","intersetallar", "plot5",
-                20,new Date(), 4.5, 4000));
-    }};*/
+    private ArrayList<PopMovie> mData;
 
 
     public PopularMoviesAdapter(Context c) {
         super();
         mContext = c;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //mData = null;
+
     }
 
     @Override
@@ -122,7 +109,6 @@ public class PopularMoviesAdapter extends BaseAdapter {
             Log.e(LOG_TAG, "mData is null or the position is strange");
         }
 
-        //imageView.setImageResource(mThumbIds[position]);
         return containerView;
     }
 

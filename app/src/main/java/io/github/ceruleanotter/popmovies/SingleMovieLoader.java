@@ -31,18 +31,14 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
         PopMovie toReturn = null;
 
             URL movieURL = MovieDataParsingUtilities.getUrlForSpecificMovie(mId);
-            //Log.e(LOG_TAG, "Starting load for " + currentMovie.getmTitle() + "\n" + movieURL.toString());
             String movieJSON = MovieDataParsingUtilities.getJSONFromWeb(movieURL);
             toReturn = MovieDataParsingUtilities.movieFromJson(movieJSON);
-
-
 
         return toReturn;
     }
 
     @Override
     public void deliverResult(final PopMovie data) {
-        //Log.d("AppLog", "deliverResult");
         if (isReset()) {
             // An async query came in while the loader is stopped.  We don't need the result.
             if (data != null) {
@@ -68,7 +64,6 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
 
     @Override
     protected void onStartLoading() {
-        //        Log.d("AppLog", "onStartLoading");
         super.onStartLoading();
         if (mData != null) {
             // If we currently have a result available, deliver it
@@ -87,7 +82,6 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
 
     @Override
     protected void onStopLoading() {
-        //        Log.d("AppLog", "onStopLoading");
         // Attempt to cancel the current load task if possible.
         cancelLoad();
     }
@@ -95,7 +89,6 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
     @Override
     public void onCanceled(PopMovie data) {
         super.onCanceled(data);
-        //        Log.d("AppLog", "onCanceled:" + data);
         // At this point we can release the resources associated with 'data' if needed.
         onReleaseResources(data);
     }
@@ -103,7 +96,6 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
     @Override
     protected void onReset() {
         super.onReset();
-        //        Log.d("AppLog", "onReset");
         // Ensure the loader is stopped
         onStopLoading();
         // At this point we can release the resources associated with 'data' if needed.
@@ -114,7 +106,7 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
     }
 
     protected void onReleaseResources(PopMovie data) {
-        //        Log.d("AppLog", "onReleaseResources");
+
         //  nothing to do.
     }
 

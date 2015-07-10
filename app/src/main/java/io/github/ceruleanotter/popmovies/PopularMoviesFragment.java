@@ -42,14 +42,15 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
 
         mMoviesAdapter = new PopularMoviesAdapter(getActivity());
         final ViewTreeObserver vto = mGridView.getViewTreeObserver();
-        // This code is from:
+        // This code is from: http://stackoverflow.com/questions/20550102/android-view-getwidth-method-always-returns-0
         // Added it because I was running in to an issue on rotation where I was getting super strange
         // behavior (views weren't appearing, things would get into an error state). I think it was
         // because the inital load time allowed for the grid view to be measured, whereas when
         // the screen was rotated, the gridview returned a height and width of 0 which really messed
         // up sizing calculations for the posters.
 
-        // This code wait
+        // This code waits for the view width to be known, before attaching the adapter, so that it can use this width to calculate the
+        // correct ratio of view width to height
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
             @Override
@@ -96,15 +97,11 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                /*String infos = "";
-                PopMovie movie = mMoviesAdapter.getmData().get(position);
-                infos = "Title: " + movie.getmTitle() + "\t runtime: " + movie.getmRuntime();
-                Toast.makeText(getActivity(), infos,
-                        Toast.LENGTH_SHORT).show();*/
+
                 Intent intent = new Intent(getActivity(), MovieDetail.class);
                 intent.putExtra(MovieDetailFragment.ID_EXTRA,
                         mMoviesAdapter.getmData().get(position).getmId());
-                //.setData(contentUri);
+
                 startActivity(intent);
             }
         });

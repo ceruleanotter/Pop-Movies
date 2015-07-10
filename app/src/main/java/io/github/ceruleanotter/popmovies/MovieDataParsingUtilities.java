@@ -146,21 +146,8 @@ public class MovieDataParsingUtilities {
             for (int i = 0; i < results.length(); i++) {
                 JSONObject currentMovie = results.getJSONObject(i);
                 String title = currentMovie.getString(TITLE_JSON);
-                /*String plot = currentMovie.getString(PLOT_JSON);
 
-                double userRating = currentMovie.getDouble(USER_RATING_JSON);*/
                 int id = currentMovie.getInt(ID_JSON);
-
-
-               /* Date releaseDate = null;
-
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-d");
-                try {
-                     releaseDate = formatter.parse(currentMovie.getString(RELEASE_DATE_JSON));
-                } catch (ParseException e) {
-                    Log.e(LOG_TAG, e.getMessage(), e);
-                    e.printStackTrace();
-                }*/
 
                 String imageURL = currentMovie.getString(POSTER_IMAGE_JSON);
                 imageURL = POSTER_BASE_URL + imageURL;
@@ -212,9 +199,6 @@ public class MovieDataParsingUtilities {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
             }
-
-
-            //return
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
