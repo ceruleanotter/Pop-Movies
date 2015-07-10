@@ -21,6 +21,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -42,6 +43,7 @@ public class MovieDataParsingUtilities {
     final private static String SORT_BY_PARAM = "sort_by";
     final private static String CERT_COUNTRY_PARAM = "certification_country";
     final private static String CERTIFICATION_LEVEL_PARAM = "certification.lte";
+    final private static String RELEASE_DATE_PARAM = "release_date.lte";
 
 
     //public sort by options
@@ -89,10 +91,14 @@ public class MovieDataParsingUtilities {
                 sortByParamValue = SORT_BY_POPULAR;
                 break;
         }
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
 
         Uri.Builder b = Uri.parse(NEW_MOVIE_BASE_URL).buildUpon()
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
-                .appendQueryParameter(SORT_BY_PARAM, sortByParamValue);
+                .appendQueryParameter(SORT_BY_PARAM, sortByParamValue)
+                .appendQueryParameter(RELEASE_DATE_PARAM, sdf.format(today));
 
         if (kidsMode) {
             b.appendQueryParameter(CERT_COUNTRY_PARAM, KIDS_MODE_COUNTRY)
@@ -111,6 +117,8 @@ public class MovieDataParsingUtilities {
         }
         return url;
     }
+
+
 
 
     public static URL getUrlForSpecificMovie(int id) {
@@ -137,11 +145,12 @@ public class MovieDataParsingUtilities {
 
             for (int i = 0; i < results.length(); i++) {
                 JSONObject currentMovie = results.getJSONObject(i);
-                /*String title = currentMovie.getString(TITLE_JSON);
-                String plot = currentMovie.getString(PLOT_JSON);
+                String title = currentMovie.getString(TITLE_JSON);
+                /*String plot = currentMovie.getString(PLOT_JSON);
 
                 double userRating = currentMovie.getDouble(USER_RATING_JSON);*/
                 int id = currentMovie.getInt(ID_JSON);
+
 
                /* Date releaseDate = null;
 
@@ -156,7 +165,7 @@ public class MovieDataParsingUtilities {
                 String imageURL = currentMovie.getString(POSTER_IMAGE_JSON);
                 imageURL = POSTER_BASE_URL + imageURL;
 
-                listOfMovies.add(new PopMovie(id, imageURL));
+                listOfMovies.add(new PopMovie(id, imageURL, title));
             }
 
         } catch (JSONException e) {
@@ -169,17 +178,26 @@ public class MovieDataParsingUtilities {
 
 
     public static PopMovie movieFromJson(String movieJSON) {
+
+        String backdropURL = "null";
+        String imageURL = "null";
+        Date releaseDate = null;
+        double userRating = 0;
+        int id = -1;
+        int runtime = 0;
+        String title = "No title provided.";
+        String plot = "No overview provided.";
+
+
+
         try {
             JSONObject currentMovie = new JSONObject(movieJSON);
-            int runtime = currentMovie.getInt(RUNTIME_JSON);
 
-            String title = currentMovie.getString(TITLE_JSON);
-            String plot = currentMovie.getString(PLOT_JSON);
-
-            double userRating = currentMovie.getDouble(USER_RATING_JSON);
-            int id = currentMovie.getInt(ID_JSON);
-
-            Date releaseDate = null;
+            id = currentMovie.getInt(ID_JSON);
+            title = currentMovie.getString(TITLE_JSON);
+            plot = currentMovie.getString(PLOT_JSON);
+            userRating = currentMovie.getDouble(USER_RATING_JSON);
+            runtime = currentMovie.getInt(RUNTIME_JSON);
 
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-d");
             try {
@@ -189,19 +207,19 @@ public class MovieDataParsingUtilities {
                 e.printStackTrace();
             }
 
-            String imageURL = currentMovie.getString(POSTER_IMAGE_JSON);
+            imageURL = currentMovie.getString(POSTER_IMAGE_JSON);
             imageURL = POSTER_BASE_URL + imageURL;
 
-            String backdropURL = currentMovie.getString(BACKDROP_IMAGE_JSON);
+            backdropURL = currentMovie.getString(BACKDROP_IMAGE_JSON);
             backdropURL = BACKDROP_BASE_URL + backdropURL;
 
-            return new PopMovie(backdropURL, imageURL, title, plot, runtime, releaseDate, userRating, id);
+            //return
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
-        return null;
+        return new PopMovie(backdropURL, imageURL, title, plot, runtime, releaseDate, userRating, id);
     }
 
 

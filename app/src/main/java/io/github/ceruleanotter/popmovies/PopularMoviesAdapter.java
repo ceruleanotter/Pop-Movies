@@ -1,13 +1,19 @@
 package io.github.ceruleanotter.popmovies;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -18,6 +24,7 @@ import java.util.ArrayList;
 public class PopularMoviesAdapter extends BaseAdapter {
     private static final String LOG_TAG = PopularMoviesAdapter.class.getSimpleName();
     private Context mContext;
+    private LayoutInflater mInflater;
 
 
 
@@ -40,6 +47,7 @@ public class PopularMoviesAdapter extends BaseAdapter {
     public PopularMoviesAdapter(Context c) {
         super();
         mContext = c;
+        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //mData = null;
     }
 
@@ -63,35 +71,59 @@ public class PopularMoviesAdapter extends BaseAdapter {
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
 
-
-        ImageView imageView;
+        final FrameLayout containerView;
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
-            //imageView.setLayoutParams(new GridView.LayoutParams(150, 150));
-            GridView gv = (GridView) parent;
+             containerView = (FrameLayout)LayoutInflater.from(mContext).inflate(R.layout.item_movie_gridview, parent, false);
+
+            final GridView gv = (GridView) parent;
             GridView.LayoutParams params = new GridView.LayoutParams(
                     GridView.LayoutParams.MATCH_PARENT,
                     GridView.LayoutParams.MATCH_PARENT);
-            params.width = (parent.getWidth()/gv.getNumColumns());
+            params.width = (gv.getWidth()/gv.getNumColumns());
             params.height = (int)Math.round(params.width*1.5);
-            imageView.setLayoutParams(params);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(0, 0, 0, 0);
+            containerView.setLayoutParams(params);
+
+
         } else {
-            imageView = (ImageView) convertView;
+            containerView = (FrameLayout) convertView;
+            containerView.setVisibility(View.INVISIBLE);
         }
 
+
+
         if (mData != null && position < mData.size()) {
-            PopMovie currentData = mData.get(position);
-            Picasso.with(mContext).load(currentData.getmImageURL()).into(imageView);
+            //ImageView imageView = new ImageView(mContext);
+            final PopMovie currentData = mData.get(position);
+
+            final ImageView imageView = (ImageView) containerView.findViewById(R.id.item_poster_imageview);
+
+            Picasso.with(mContext).load(currentData.getmImageURL()).into(imageView, new Callback.EmptyCallback() {
+               @Override
+                public void onSuccess() {
+                   containerView.setVisibility(View.VISIBLE);
+                   imageView.setVisibility(View.VISIBLE);
+                   TextView tv = (TextView) containerView.findViewById(R.id.item_title_textview);
+                   tv.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onError() {
+                    containerView.setVisibility(View.VISIBLE);
+                    imageView.setVisibility(View.INVISIBLE);
+                    TextView tv = (TextView) containerView.findViewById(R.id.item_title_textview);
+                    tv.setText(currentData.getmTitle());
+                    tv.setVisibility(View.VISIBLE);
+
+                }
+            });
         } else {
             //THIS IS A PROBLEM
             Log.e(LOG_TAG, "mData is null or the position is strange");
         }
 
         //imageView.setImageResource(mThumbIds[position]);
-        return imageView;
+        return containerView;
     }
 
     public void setmData(ArrayList<PopMovie> mData) {
@@ -102,6 +134,28 @@ public class PopularMoviesAdapter extends BaseAdapter {
 
     public ArrayList<PopMovie> getmData() {
         return mData;
+    }
+
+    private void fadeInView(final View view, final boolean fadeIn) {
+        float alphaVal = 0.0f;
+        if (fadeIn) {
+            alphaVal = 1.0f;
+        }
+
+        view.animate()
+                .alpha(alphaVal)
+                .setDuration(1000)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        if (fadeIn) {
+                            view.setVisibility(View.VISIBLE);
+                        } else {
+                            view.setVisibility(View.GONE);
+                        }
+                    }
+                });
     }
 
 

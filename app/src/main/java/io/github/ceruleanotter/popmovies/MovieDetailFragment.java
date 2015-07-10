@@ -63,7 +63,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<PopMovie> loader, PopMovie data) {
-        if (data == null)
+        if (data.getmId() == -1)
             return;
         mTitleTextView.setText(data.getmTitle());
 
@@ -94,6 +94,10 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                             mTitleTextView.setBackgroundColor(Color.HSVToColor(vibrant));
                         }
                         // TODO apply palette to text views, backgrounds, etc.
+                    }
+                    @Override
+                    public void onError() {
+                        mBackdropImageView.setVisibility(View.GONE);
                     }
                 });
 

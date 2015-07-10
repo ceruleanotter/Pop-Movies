@@ -29,9 +29,10 @@ public class PopMovie {
         this.mId = mId;
     }
 
-    public PopMovie(int mId, String mImageURL) {
+    public PopMovie(int mId, String mImageURL, String title) {
         this.mId = mId;
         this.mImageURL = mImageURL;
+        this.mTitle = title;
     }
 
     public String getmImageURL() {
