@@ -37,6 +37,11 @@ public class MovieDataParsingUtilities {
     final private static String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w342";
     final private static String BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w500";
 
+    final private static String TRAILER_PATH_TO_APPEND_URL ="/videos";
+    final private static String REVIEW_PATH_TO_APPEND_URL ="/reviews";
+
+
+
     final private static String API_KEY = "3062e696db60daf1cebee8178aa5f103";
 
     final private static String API_KEY_PARAM = "api_key";
@@ -62,10 +67,20 @@ public class MovieDataParsingUtilities {
     final private static String TITLE_JSON = "original_title";
     final private static String PLOT_JSON = "overview";
     final private static String RUNTIME_JSON = "runtime";
+    final private static String ID_JSON = "id";
+
     //this is only in the specific movie http://api.themoviedb.org/3/movie/245891?api_key=3062e696db60daf1cebee8178aa5f103
     final private static String RELEASE_DATE_JSON = "release_date";
     final private static String USER_RATING_JSON = "vote_average";
-    final private static String ID_JSON = "id";
+
+    //JSON trailer and review constants
+    final private static String TRAILER_RESULT_JSON = "results";
+    private static final String URL_YOUTUBE = "https://www.youtube.com/watch";
+    private static final String TRAILER_SITE_JSON = "site";
+    private static final String TRAILER_YOUTUBE_VALUE_JSON = "YouTube";
+    private static final String YOUTUBE_ID_PARAM = "v";
+    private static final String TRAILER_YOUTUBE_KEY_JSON = "key" ;
+    private static final String TRAILER_NAME_JSON = "name";
 
 
     public static URL getUrlForNewMovies(Context c) {
@@ -122,7 +137,19 @@ public class MovieDataParsingUtilities {
 
 
     public static URL getUrlForSpecificMovie(int id) {
-        Uri builtUri = Uri.parse(SINGLE_MOVIE_BASE_URL + id).buildUpon()
+        return getSingleMovieURLHelper(id, "");
+    }
+
+    public static URL getUrlForSpecificMovieTrailer(int id) {
+        return getSingleMovieURLHelper(id, TRAILER_PATH_TO_APPEND_URL);
+    }
+
+    public static URL getUrlForSpecificMovieReviews(int id) {
+        return getSingleMovieURLHelper(id, REVIEW_PATH_TO_APPEND_URL);
+    }
+
+    public static URL getSingleMovieURLHelper(int id, String extraPath) {
+        Uri builtUri = Uri.parse(SINGLE_MOVIE_BASE_URL + id + extraPath).buildUpon()
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .build();
 
@@ -163,8 +190,7 @@ public class MovieDataParsingUtilities {
         return listOfMovies;
     }
 
-
-    public static PopMovie movieFromJson(String movieJSON) {
+    public static PopMovie movieFromJson(String movieJSON, String trailerJSON) {
 
         String backdropURL = "null";
         String imageURL = "null";
@@ -204,7 +230,28 @@ public class MovieDataParsingUtilities {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
-        return new PopMovie(backdropURL, imageURL, title, plot, runtime, releaseDate, userRating, id);
+        return new PopMovie(backdropURL, imageURL, title, plot, runtime, releaseDate, userRating, id, trailerUriListFromJson(trailerJSON));
+    }
+
+    public static ArrayList<MovieTrailer> trailerUriListFromJson(String trailerJSON) {
+
+        ArrayList<MovieTrailer> trailers = new ArrayList<MovieTrailer>();
+        try {
+            JSONArray listOfTrailers = new JSONObject(trailerJSON).getJSONArray(TRAILER_RESULT_JSON);
+           for (int i = 0; i< listOfTrailers.length(); i++) {
+               JSONObject currentTrailer = listOfTrailers.getJSONObject(i);
+               if (currentTrailer.getString(TRAILER_SITE_JSON).equals(TRAILER_YOUTUBE_VALUE_JSON)) {
+                   trailers.add(new MovieTrailer(currentTrailer.getString(TRAILER_NAME_JSON),
+                           Uri.parse(URL_YOUTUBE).buildUpon().appendQueryParameter(
+                           YOUTUBE_ID_PARAM, currentTrailer.getString(TRAILER_YOUTUBE_KEY_JSON))
+                           .build()));
+               }
+           }
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+        }
+        return trailers;
     }
 
 

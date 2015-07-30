@@ -3,6 +3,7 @@ package io.github.ceruleanotter.popmovies;
 /**
  * Created by lyla on 6/5/15.
  */
+
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
@@ -30,9 +31,14 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
         Log.e(LOG_TAG, "Starting load for " + newMoviesUrl.toString());
         PopMovie toReturn = null;
 
-            URL movieURL = MovieDataParsingUtilities.getUrlForSpecificMovie(mId);
-            String movieJSON = MovieDataParsingUtilities.getJSONFromWeb(movieURL);
-            toReturn = MovieDataParsingUtilities.movieFromJson(movieJSON);
+        URL movieURL = MovieDataParsingUtilities.getUrlForSpecificMovie(mId);
+        URL trailerURL = MovieDataParsingUtilities.getUrlForSpecificMovieTrailer(mId);
+
+        String movieJSON = MovieDataParsingUtilities.getJSONFromWeb(movieURL);
+        String trailerJSON = MovieDataParsingUtilities.getJSONFromWeb(trailerURL);
+
+        toReturn = MovieDataParsingUtilities.movieFromJson(movieJSON, trailerJSON);
+
 
         return toReturn;
     }

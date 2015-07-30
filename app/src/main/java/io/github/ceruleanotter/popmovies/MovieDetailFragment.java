@@ -74,7 +74,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             return;
         mTitleTextView.setText(data.getmTitle());
 
-
         mPlotTextView.setText(data.getmPlot());
 
         String year = "Unknown year";

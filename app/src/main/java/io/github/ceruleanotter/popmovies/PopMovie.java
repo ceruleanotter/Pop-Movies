@@ -1,5 +1,6 @@
 package io.github.ceruleanotter.popmovies;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -18,7 +19,10 @@ public class PopMovie {
     private double mRating;
     private int mId;
 
-    public PopMovie(String mBackdropURL, String mImageURL, String mTitle, String mPlot, int mRuntime, Date mReleaseDate, double mRating, int mId) {
+    private ArrayList<MovieTrailer> mTrailers;
+
+    public PopMovie(String mBackdropURL, String mImageURL, String mTitle, String mPlot, int mRuntime,
+                    Date mReleaseDate, double mRating, int mId, ArrayList<MovieTrailer> mTrailers) {
         this.mBackdropURL = mBackdropURL;
         this.mImageURL = mImageURL;
         this.mTitle = mTitle;
@@ -27,6 +31,7 @@ public class PopMovie {
         this.mReleaseDate = mReleaseDate;
         this.mRating = mRating;
         this.mId = mId;
+        this.mTrailers = mTrailers;
     }
 
     public PopMovie(int mId, String mImageURL, String title) {
@@ -69,5 +74,9 @@ public class PopMovie {
 
     public String getmBackdropURL() {
         return mBackdropURL;
+    }
+
+    public ArrayList<MovieTrailer> getmTrailers() {
+        return mTrailers;
     }
 }
