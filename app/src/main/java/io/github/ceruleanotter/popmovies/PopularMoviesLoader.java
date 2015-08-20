@@ -1,6 +1,7 @@
 package io.github.ceruleanotter.popmovies;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import org.json.JSONException;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by lyla on 6/4/15.
@@ -16,25 +18,51 @@ public class PopularMoviesLoader extends AsyncTaskLoader<ArrayList<PopMovie>> {
     public final static String LOG_TAG = PopularMoviesLoader.class.getSimpleName();
     //From this example http://stackoverflow.com/questions/20279216/asynctaskloader-basic-example-android
     ArrayList<PopMovie> mData;
+    Context mContext;
 
 
     public PopularMoviesLoader(Context context) {
         super(context);
+        mContext = context;
     }
 
     @Override
     public ArrayList<PopMovie> loadInBackground() {
-
-        URL newMoviesUrl = MovieDataParsingUtilities.getUrlForNewMovies(getContext());
-        Log.e(LOG_TAG, "Starting load for " + newMoviesUrl.toString());
-        String moviesJSON = MovieDataParsingUtilities.getJSONFromWeb(newMoviesUrl);
         ArrayList<PopMovie> toReturn = null;
-        try {
-            toReturn = MovieDataParsingUtilities.getParsedMovieDiscoveryJSONData(moviesJSON);
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
+        boolean starMode = MovieDataParsingUtilities.getStarModePreference(mContext);
+
+
+
+        if (starMode) {
+            toReturn = new ArrayList<PopMovie>();
+            //getting all of the url data from each starred movie
+            SharedPreferences favorites = mContext.getSharedPreferences(MovieDetailFragment.STAR_DATASTORE, Context.MODE_PRIVATE);
+            Map<String, ?> favoritesMap = favorites.getAll();
+            for (Map.Entry<String, ?> movieStatus : favoritesMap.entrySet())
+            {
+                if (movieStatus.getValue() instanceof Boolean && movieStatus.getValue().equals(Boolean.TRUE)) {
+                    URL currentURL = MovieDataParsingUtilities.getSingleMovieURLHelper(Integer.parseInt(movieStatus.getKey()),"");
+                    String currentJSON = MovieDataParsingUtilities.getJSONFromWeb(currentURL);
+                    PopMovie currentMovie = MovieDataParsingUtilities.movieFromJson(currentJSON);
+                    toReturn.add(0, currentMovie);
+                }
+            }
+
+        } else {
+            URL newMoviesUrl = MovieDataParsingUtilities.getUrlForNewMovies(getContext());
+            Log.e(LOG_TAG, "Starting load for " + newMoviesUrl.toString());
+            String moviesJSON = MovieDataParsingUtilities.getJSONFromWeb(newMoviesUrl);
+
+            try {
+                toReturn = MovieDataParsingUtilities.getParsedMovieDiscoveryJSONData(moviesJSON);
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, e.getMessage(), e);
+                e.printStackTrace();
+            }
         }
+
+
+
         return toReturn;
     }
 

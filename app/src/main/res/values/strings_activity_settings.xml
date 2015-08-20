@@ -16,6 +16,11 @@
     <string name="pref_description_kids_mode">Shows only G and PG movies
     </string>
 
+    <string name="pref_star_mode_key">starmode</string>
+    <string name="pref_title_star_mode">Enable favorite mode</string>
+    <string name="pref_description_star_mode">Shows your favorite movies
+    </string>
+
 
     <string name="pref_sort_by_key">sortby</string>
     <string name="pref_title_sort_by">Sort By</string>

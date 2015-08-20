@@ -101,6 +101,7 @@ public class MovieDataParsingUtilities {
         String sortByParamValue;
         String sortBy = getSortByPreference(c);
         boolean kidsMode = getKidsModePreference(c);
+        boolean starMode = getStarModePreference(c);
 
         //wish there was some way to associate with the array in strings_activity_settings itself
         switch (sortBy) {
@@ -120,6 +121,9 @@ public class MovieDataParsingUtilities {
         }
         Date today = Calendar.getInstance().getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+
+
 
 
         Uri.Builder b = Uri.parse(NEW_MOVIE_BASE_URL).buildUpon()
@@ -202,6 +206,10 @@ public class MovieDataParsingUtilities {
         return listOfMovies;
     }
 
+    public static PopMovie movieFromJson(String movieJSON) {
+        return movieFromJson(movieJSON, null, null);
+    }
+
     public static PopMovie movieFromJson(String movieJSON, String trailerJSON, String reviewJSON) {
 
         String backdropURL = "null";
@@ -242,7 +250,11 @@ public class MovieDataParsingUtilities {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
-        return new PopMovie(backdropURL, imageURL, title, plot, runtime, releaseDate, userRating, id, trailerUriListFromJson(trailerJSON), reviewUriListFromJson(reviewJSON));
+
+        ArrayList<MovieTrailer> trailers = (trailerJSON == null) ? null : trailerUriListFromJson(trailerJSON);
+        ArrayList<MovieReview> reviews = (reviewJSON == null) ? null : reviewUriListFromJson(reviewJSON);
+
+        return new PopMovie(backdropURL, imageURL, title, plot, runtime, releaseDate, userRating, id,trailers, reviews);
     }
 
     public static ArrayList<MovieTrailer> trailerUriListFromJson(String trailerJSON) {
@@ -362,4 +374,8 @@ public class MovieDataParsingUtilities {
     }
 
 
+    public static boolean getStarModePreference(Context c) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
+        return sharedPreferences.getBoolean("starmode", false);
+    }
 }

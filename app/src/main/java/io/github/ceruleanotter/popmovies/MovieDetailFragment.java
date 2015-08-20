@@ -42,6 +42,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     int mID;
     public final static String ID_EXTRA = "id_extra";
     private static final int MOVIE_LOADER = 1;
+    public static final String STAR_DATASTORE = "FavoriteMoviesFile";
+
+
     @InjectView(R.id.title)
     TextView mTitleTextView;
     @InjectView(R.id.release_date)
@@ -86,7 +89,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         //For ButterKnife view injection
         ButterKnife.inject(this, rootView);
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
-        mStorage = getActivity().getPreferences(Context.MODE_PRIVATE);
+        mStorage = getActivity().getSharedPreferences(STAR_DATASTORE, Context.MODE_PRIVATE);
         return rootView;
     }
 
@@ -229,7 +232,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
 
     public void onStarClicked(boolean b) {
-        
+
         SharedPreferences.Editor editor = mStorage.edit();
         editor.putBoolean(Integer.toString(mID), b);
         editor.commit();

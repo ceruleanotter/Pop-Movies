@@ -3,6 +3,7 @@ package io.github.ceruleanotter.popmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,12 +12,17 @@ public class PopularMovies extends AppCompatActivity {
 
     String mCurrentSortBy;
     boolean mCurrentKidsMode;
+    boolean mStarMode;
+
+    final static String LOG_TAG = PopularMovies.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCurrentSortBy = MovieDataParsingUtilities.getSortByPreference(this);
         mCurrentKidsMode = MovieDataParsingUtilities.getKidsModePreference(this);
+        mStarMode = MovieDataParsingUtilities.getStarModePreference(this);
+        Log.e(LOG_TAG, "Favorite mode is " + mStarMode);
         setContentView(R.layout.activity_popular_movies);
     }
 
@@ -49,10 +55,14 @@ public class PopularMovies extends AppCompatActivity {
         super.onResume();
         String sortByNow = MovieDataParsingUtilities.getSortByPreference(this);
         boolean kidsByNow = MovieDataParsingUtilities.getKidsModePreference(this);
-        if (!(sortByNow.equals(mCurrentSortBy)) || !(kidsByNow == mCurrentKidsMode)) {
+        boolean starModeByNow = MovieDataParsingUtilities.getStarModePreference(this);
+        if (!(sortByNow.equals(mCurrentSortBy)) ||
+                !(kidsByNow == mCurrentKidsMode) ||
+                !(starModeByNow == mStarMode)) {
             ((PopularMoviesFragment)getSupportFragmentManager().findFragmentById(R.id.fragment)).onSettingsChange();
             mCurrentSortBy = sortByNow;
             mCurrentKidsMode = kidsByNow;
+            mStarMode = starModeByNow;
         }
     }
 }

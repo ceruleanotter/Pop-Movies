@@ -31,6 +31,7 @@ public class SettingsActivity extends PreferenceActivity
         // updated when the preference changes.
         bindPreferenceSummaryToValueString(findPreference(getString(R.string.pref_sort_by_key)));
         bindPreferenceSummaryToValueBoolean(findPreference(getString(R.string.pref_kids_mode_key)));
+        bindPreferenceSummaryToValueBoolean(findPreference(getString(R.string.pref_star_mode_key)));
     }
 
     /**
