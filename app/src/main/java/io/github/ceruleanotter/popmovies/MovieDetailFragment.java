@@ -2,6 +2,7 @@ package io.github.ceruleanotter.popmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,11 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -35,6 +38,7 @@ import butterknife.InjectView;
  */
 public class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<PopMovie> {
 
+    String LOG_TAG = MovieDetailFragment.class.getSimpleName();
     int mID;
     public final static String ID_EXTRA = "id_extra";
     private static final int MOVIE_LOADER = 1;
@@ -54,7 +58,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     RatingBar mRatingRatingBar;
 
     @InjectView(R.id.star)
-    RatingBar mStar;
+    ToggleButton mStar;
 
     @InjectView(R.id.titlebar)
     RelativeLayout mTitleBarLayout;
@@ -66,6 +70,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @InjectView(R.id.root_reviews_linear_layout)
     LinearLayout mRootLayoutForReviews;
+
+
+    SharedPreferences mStorage;
 
     public MovieDetailFragment() {
 
@@ -79,6 +86,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         //For ButterKnife view injection
         ButterKnife.inject(this, rootView);
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
+        mStorage = getActivity().getPreferences(Context.MODE_PRIVATE);
         return rootView;
     }
 
@@ -89,6 +97,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<PopMovie> loader, PopMovie data) {
+
+
         if (data.getmId() == -1)
             return;
         mTitleTextView.setText(data.getmTitle());
@@ -110,6 +120,16 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         Picasso.with(getActivity()).load(data.getmImageURL()).into(mPosterImageView);
         mBackdropImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Picasso.with(getActivity()).load(data.getmBackdropURL()).into(mBackdropImageView);
+
+        //Star Stuff
+        mStar.setChecked(mStorage.getBoolean(Integer.toString(mID),false));
+        mStar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                onStarClicked(b);
+            }
+        });
+
 
 
 
@@ -208,4 +228,10 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     }
 
 
+    public void onStarClicked(boolean b) {
+        
+        SharedPreferences.Editor editor = mStorage.edit();
+        editor.putBoolean(Integer.toString(mID), b);
+        editor.commit();
+    }
 }
