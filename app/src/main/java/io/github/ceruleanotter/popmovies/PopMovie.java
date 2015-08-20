@@ -20,9 +20,11 @@ public class PopMovie {
     private int mId;
 
     private ArrayList<MovieTrailer> mTrailers;
+    private ArrayList<MovieReview> mReviews;
 
     public PopMovie(String mBackdropURL, String mImageURL, String mTitle, String mPlot, int mRuntime,
-                    Date mReleaseDate, double mRating, int mId, ArrayList<MovieTrailer> mTrailers) {
+                    Date mReleaseDate, double mRating, int mId, ArrayList<MovieTrailer> mTrailers,
+                    ArrayList<MovieReview> mReviews) {
         this.mBackdropURL = mBackdropURL;
         this.mImageURL = mImageURL;
         this.mTitle = mTitle;
@@ -32,6 +34,7 @@ public class PopMovie {
         this.mRating = mRating;
         this.mId = mId;
         this.mTrailers = mTrailers;
+        this.mReviews = mReviews;
     }
 
     public PopMovie(int mId, String mImageURL, String title) {
@@ -78,5 +81,9 @@ public class PopMovie {
 
     public ArrayList<MovieTrailer> getmTrailers() {
         return mTrailers;
+    }
+
+    public ArrayList<MovieReview> getmReviews() {
+        return mReviews;
     }
 }

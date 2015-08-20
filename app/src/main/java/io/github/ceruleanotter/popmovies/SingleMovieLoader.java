@@ -33,11 +33,14 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
 
         URL movieURL = MovieDataParsingUtilities.getUrlForSpecificMovie(mId);
         URL trailerURL = MovieDataParsingUtilities.getUrlForSpecificMovieTrailer(mId);
+        URL reviewsURL = MovieDataParsingUtilities.getUrlForSpecificMovieReviews(mId);
+
 
         String movieJSON = MovieDataParsingUtilities.getJSONFromWeb(movieURL);
         String trailerJSON = MovieDataParsingUtilities.getJSONFromWeb(trailerURL);
+        String reviewJSON = MovieDataParsingUtilities.getJSONFromWeb(reviewsURL);
 
-        toReturn = MovieDataParsingUtilities.movieFromJson(movieJSON, trailerJSON);
+        toReturn = MovieDataParsingUtilities.movieFromJson(movieJSON, trailerJSON, reviewJSON);
 
 
         return toReturn;

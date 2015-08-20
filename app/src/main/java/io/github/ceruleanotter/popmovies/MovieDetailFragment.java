@@ -1,8 +1,11 @@
 package io.github.ceruleanotter.popmovies;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -11,8 +14,11 @@ import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
@@ -47,6 +53,19 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @InjectView(R.id.rating)
     RatingBar mRatingRatingBar;
 
+    @InjectView(R.id.star)
+    RatingBar mStar;
+
+    @InjectView(R.id.titlebar)
+    RelativeLayout mTitleBarLayout;
+
+
+
+    @InjectView(R.id.root_trailers_linear_layout)
+    LinearLayout mRootLayoutForTrailers;
+
+    @InjectView(R.id.root_reviews_linear_layout)
+    LinearLayout mRootLayoutForReviews;
 
     public MovieDetailFragment() {
 
@@ -93,6 +112,49 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         Picasso.with(getActivity()).load(data.getmBackdropURL()).into(mBackdropImageView);
 
 
+
+        //Add trailers
+        LayoutInflater lf = (LayoutInflater) getActivity().getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+        for (MovieTrailer t : data.getmTrailers()) {
+            LinearLayout currentMovieTrailerLayout = (LinearLayout)lf.inflate(R.layout.item_trailer, null);
+            ((TextView)currentMovieTrailerLayout.findViewById(R.id.trailer_name)).setText(t.getmName());
+            final Uri currentLink = t.getmUri();
+            ((Button) currentMovieTrailerLayout.findViewById(R.id.trailer_play_button)).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, currentLink ));
+
+                        }
+                    }
+            );
+
+            mRootLayoutForTrailers.addView(currentMovieTrailerLayout);
+
+
+        }
+
+        //Add reviews
+        for (MovieReview r : data.getmReviews()) {
+            LinearLayout currentMovieReviewLayout = (LinearLayout)lf.inflate(R.layout.item_review, null);
+            ((TextView)currentMovieReviewLayout.findViewById(R.id.review_summary)).setText(r.getmReviewText());
+            final Uri currentLink = r.getmUri();
+            Button b = (Button) currentMovieReviewLayout.findViewById(R.id.read_review_button);
+            b.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, currentLink));
+
+                        }
+                    }
+            );
+
+
+            mRootLayoutForReviews.addView(currentMovieReviewLayout);
+        }
+
         Picasso.with(getActivity())
                 .load(data.getmBackdropURL())
                 .fit().centerCrop()
@@ -106,7 +168,10 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                         Palette.Swatch vibrantSwatch = palette.getDarkVibrantSwatch();
                         if (vibrantSwatch != null) {
                             float[] vibrant = vibrantSwatch.getHsl();
-                            mTitleTextView.setBackgroundColor(Color.HSVToColor(vibrant));
+                            int color = Color.HSVToColor(vibrant);
+                            mTitleBarLayout.setBackgroundColor(color);
+                            setButtonColors(color);
+
                         }
 
                     }
@@ -116,6 +181,21 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                         mBackdropImageView.setVisibility(View.GONE);
                     }
                 });
+    }
+
+    private void setButtonColors(int color) {
+
+        for(int i = 0; i < mRootLayoutForTrailers.getChildCount(); i++) {
+            LinearLayout currentItem = (LinearLayout)mRootLayoutForTrailers.getChildAt(i);
+            Button b = (Button)currentItem.findViewById(R.id.trailer_play_button);
+            b.setBackgroundColor(color);
+        }
+        for(int i = 0; i < mRootLayoutForReviews.getChildCount(); i++) {
+            LinearLayout currentItem = (LinearLayout)mRootLayoutForReviews.getChildAt(i);
+            Button b = (Button)currentItem.findViewById(R.id.read_review_button);
+            b.setBackgroundColor(color);
+        }
+
     }
 
     @Override

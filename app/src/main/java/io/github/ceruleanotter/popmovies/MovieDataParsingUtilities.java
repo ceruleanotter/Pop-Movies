@@ -82,6 +82,18 @@ public class MovieDataParsingUtilities {
     private static final String TRAILER_YOUTUBE_KEY_JSON = "key" ;
     private static final String TRAILER_NAME_JSON = "name";
 
+    final private static String REVIEW_RESULT_JSON = "results";
+    final private static String REVIEW_ID_JSON = "id";
+    final private static String REVIEW_CONTENT_JSON = "content";
+
+    //reviews http://api.themoviedb.org/3/movie/245891/reviews?api_key=3062e696db60daf1cebee8178aa5f103
+
+    //Review url https://www.themoviedb.org/review/55910381c3a36807f900065d?language=en
+
+    final private static String URL_SINGLE_REVIEW = "https://www.themoviedb.org/review";
+    final private static String REVIEW_LANG_PARAM_KEY = "language";
+    final private static String REVIEW_LANG_PARAM_VALUE_ENGLISH = "en";
+
 
     public static URL getUrlForNewMovies(Context c) {
 
@@ -190,7 +202,7 @@ public class MovieDataParsingUtilities {
         return listOfMovies;
     }
 
-    public static PopMovie movieFromJson(String movieJSON, String trailerJSON) {
+    public static PopMovie movieFromJson(String movieJSON, String trailerJSON, String reviewJSON) {
 
         String backdropURL = "null";
         String imageURL = "null";
@@ -230,7 +242,7 @@ public class MovieDataParsingUtilities {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
-        return new PopMovie(backdropURL, imageURL, title, plot, runtime, releaseDate, userRating, id, trailerUriListFromJson(trailerJSON));
+        return new PopMovie(backdropURL, imageURL, title, plot, runtime, releaseDate, userRating, id, trailerUriListFromJson(trailerJSON), reviewUriListFromJson(reviewJSON));
     }
 
     public static ArrayList<MovieTrailer> trailerUriListFromJson(String trailerJSON) {
@@ -254,6 +266,30 @@ public class MovieDataParsingUtilities {
         return trailers;
     }
 
+
+    public static ArrayList<MovieReview> reviewUriListFromJson(String reviewJSON) {
+        ArrayList<MovieReview> reviews = new ArrayList<MovieReview>();
+        try {
+            JSONArray listOfReviews = new JSONObject(reviewJSON).getJSONArray(REVIEW_RESULT_JSON);
+            for (int i = 0; i< listOfReviews.length(); i++) {
+
+
+
+                JSONObject currentReview = listOfReviews.getJSONObject(i);
+
+                    reviews.add(new MovieReview(currentReview.getString(REVIEW_CONTENT_JSON),
+                            Uri.parse(String.format(URL_SINGLE_REVIEW)).buildUpon()
+                                    .appendPath(currentReview.getString(REVIEW_ID_JSON))
+                                    .appendQueryParameter(REVIEW_LANG_PARAM_KEY, REVIEW_LANG_PARAM_VALUE_ENGLISH)
+                                    .build()));
+
+            }
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+        }
+        return reviews;
+    }
 
     public static String getJSONFromWeb(URL url) {
         // These two need to be declared outside the try/catch

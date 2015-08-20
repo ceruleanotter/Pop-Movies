@@ -2,19 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
-<TextView
-    android:layout_width="0dp"
-    android:layout_weight="2"
-    android:layout_height="wrap_content"
-    android:id="@+id/trailer_name"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:id="@+id/review_summary"
+        android:singleLine="true"/>
 
     <Button
-        android:id="@+id/trailer_play_button"
+        android:id="@+id/read_review_button"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
-        android:text="Play Trailer"/>
+        android:text="Read Full Review"/>
 
 
 </LinearLayout>
