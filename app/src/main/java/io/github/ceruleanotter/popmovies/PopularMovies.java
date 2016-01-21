@@ -8,13 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class PopularMovies extends AppCompatActivity {
+public class PopularMovies extends AppCompatActivity implements PopularMoviesFragment.MovieClickCallback {
 
     String mCurrentSortBy;
     boolean mCurrentKidsMode;
     boolean mStarMode;
+    boolean mTwoPane;
 
     final static String LOG_TAG = PopularMovies.class.getSimpleName();
+    final static String MOVIEDETAILFRAGMENT_TAG = "MOVIE_DETAIL_FRAG_TAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,26 @@ public class PopularMovies extends AppCompatActivity {
         mStarMode = MovieDataParsingUtilities.getStarModePreference(this);
         Log.e(LOG_TAG, "Favorite mode is " + mStarMode);
         setContentView(R.layout.activity_popular_movies);
+
+
+        if (findViewById(R.id.movie_detail_container) != null) {
+            // The detail container view will be present only in the large-screen layouts
+            // (res/layout-sw600dp). If this view is present, then the activity should be
+            // in two-pane mode.
+            mTwoPane = true;
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.movie_detail_container, new MovieDetailFragment(), MOVIEDETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        } else {
+            mTwoPane = false;
+            //getSupportActionBar().setElevation(0f);
+        }
+
     }
 
 
@@ -64,5 +86,31 @@ public class PopularMovies extends AppCompatActivity {
             mCurrentKidsMode = kidsByNow;
             mStarMode = starModeByNow;
         }
+    }
+
+    @Override
+    public void onItemSelected(int movieID) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putInt(MovieDetailFragment.ID_BUNDLE_ARGS, movieID);
+
+            MovieDetailFragment fragment = new MovieDetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment, MOVIEDETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+
+            Intent intent = new Intent(this, MovieDetail.class);
+            intent.putExtra(MovieDetailFragment.ID_INTENT_EXTRA,
+                    movieID);
+
+            startActivity(intent);
+        }
+
     }
 }

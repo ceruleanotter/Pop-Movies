@@ -11,7 +11,20 @@ public class MovieDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-        mFragment = (MovieDetailFragment)getSupportFragmentManager().findFragmentById(R.id.fragment);
+
+
+        //attaching the args if they were from an intent
+        Bundle arguments = new Bundle();
+        arguments.putInt(MovieDetailFragment.ID_BUNDLE_ARGS, getIntent().getIntExtra(MovieDetailFragment.ID_INTENT_EXTRA, -1));
+
+        MovieDetailFragment fragment = new MovieDetailFragment();
+        fragment.setArguments(arguments);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.movie_detail_container, fragment)
+                .commit();
+
+        //mFragment = (MovieDetailFragment)getSupportFragmentManager().findFragmentById(R.id.fragment);
 
     }
 

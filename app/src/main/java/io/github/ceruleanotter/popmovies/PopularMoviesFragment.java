@@ -1,6 +1,5 @@
 package io.github.ceruleanotter.popmovies;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -64,11 +63,14 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
                         public void onItemClick(AdapterView<?> parent, View v,
                                                 int position, long id) {
 
-                            Intent intent = new Intent(getActivity(), MovieDetail.class);
+                            ((MovieClickCallback)getActivity()).onItemSelected(mMoviesAdapter.getmData().get(position).getmId());
+
+                            //before tablet
+                           /* Intent intent = new Intent(getActivity(), MovieDetail.class);
                             intent.putExtra(MovieDetailFragment.ID_EXTRA,
                                     mMoviesAdapter.getmData().get(position).getmId());
 
-                            startActivity(intent);
+                            startActivity(intent);*/
                         }
                     });
                     ViewTreeObserver obs = mGridView.getViewTreeObserver();
@@ -98,11 +100,14 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
-                Intent intent = new Intent(getActivity(), MovieDetail.class);
+                ((MovieClickCallback)getActivity()).onItemSelected(mMoviesAdapter.getmData().get(position).getmId());
+
+                //Original code with intent, before tablet
+                /*Intent intent = new Intent(getActivity(), MovieDetail.class);
                 intent.putExtra(MovieDetailFragment.ID_EXTRA,
                         mMoviesAdapter.getmData().get(position).getmId());
 
-                startActivity(intent);
+                startActivity(intent);*/
             }
         });
     }
@@ -121,4 +126,17 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
     public void onSettingsChange() {
         getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
     }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface MovieClickCallback {
+        /**
+         * MovieDetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(int MovieID);
+    }
+
 }

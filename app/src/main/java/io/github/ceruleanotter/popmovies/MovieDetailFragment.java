@@ -40,7 +40,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     String LOG_TAG = MovieDetailFragment.class.getSimpleName();
     int mID;
-    public final static String ID_EXTRA = "id_extra";
+    public final static String ID_BUNDLE_ARGS = "id_extra_bundle";
+    public final static String ID_INTENT_EXTRA = "id_extra_intent";
     private static final int MOVIE_LOADER = 1;
     public static final String STAR_DATASTORE = "FavoriteMoviesFile";
 
@@ -85,11 +86,26 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-        mID = getActivity().getIntent().getIntExtra(ID_EXTRA, -1);
+        //mID = getActivity().getIntent().getIntExtra(ID_EXTRA, -1);
+
+
+
+
         //For ButterKnife view injection
         ButterKnife.inject(this, rootView);
-        getLoaderManager().initLoader(MOVIE_LOADER, null, this);
+
+
+        //Get the id from the bundle
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mID = arguments.getInt(ID_BUNDLE_ARGS);
+            getLoaderManager().initLoader(MOVIE_LOADER, null, this);
+        }
         mStorage = getActivity().getSharedPreferences(STAR_DATASTORE, Context.MODE_PRIVATE);
+
+
+
+
         return rootView;
     }
 
@@ -237,4 +253,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         editor.putBoolean(Integer.toString(mID), b);
         editor.commit();
     }
+
+
+
+
 }
