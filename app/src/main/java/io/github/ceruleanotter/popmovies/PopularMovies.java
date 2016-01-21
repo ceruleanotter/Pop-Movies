@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 
 
 public class PopularMovies extends AppCompatActivity implements PopularMoviesFragment.MovieClickCallback {
@@ -14,9 +16,12 @@ public class PopularMovies extends AppCompatActivity implements PopularMoviesFra
     boolean mCurrentKidsMode;
     boolean mStarMode;
     boolean mTwoPane;
+    boolean mFirstItemSelected;
+    FrameLayout mMovieDetailContainerFrameLayout;
 
     final static String LOG_TAG = PopularMovies.class.getSimpleName();
     final static String MOVIEDETAILFRAGMENT_TAG = "MOVIE_DETAIL_FRAG_TAG";
+    final static String BUNDLE_EXTRA_FIRST_ITEM_SELECTED = "FIRST_ITEM_SELECTED";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +32,9 @@ public class PopularMovies extends AppCompatActivity implements PopularMoviesFra
         Log.e(LOG_TAG, "Favorite mode is " + mStarMode);
         setContentView(R.layout.activity_popular_movies);
 
-
+        mMovieDetailContainerFrameLayout = (FrameLayout)findViewById(R.id.movie_detail_container);
         if (findViewById(R.id.movie_detail_container) != null) {
+
             // The detail container view will be present only in the large-screen layouts
             // (res/layout-sw600dp). If this view is present, then the activity should be
             // in two-pane mode.
@@ -40,6 +46,11 @@ public class PopularMovies extends AppCompatActivity implements PopularMoviesFra
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.movie_detail_container, new MovieDetailFragment(), MOVIEDETAILFRAGMENT_TAG)
                         .commit();
+            } else {
+                mFirstItemSelected = savedInstanceState.getBoolean(BUNDLE_EXTRA_FIRST_ITEM_SELECTED, false);
+                if (mFirstItemSelected) {
+                    mMovieDetailContainerFrameLayout.setVisibility(View.VISIBLE);
+                }
             }
         } else {
             mTwoPane = false;
@@ -88,6 +99,13 @@ public class PopularMovies extends AppCompatActivity implements PopularMoviesFra
         }
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(BUNDLE_EXTRA_FIRST_ITEM_SELECTED, mFirstItemSelected);
+        super.onSaveInstanceState(outState);
+    }
+
     @Override
     public void onItemSelected(int movieID) {
         if (mTwoPane) {
@@ -99,6 +117,12 @@ public class PopularMovies extends AppCompatActivity implements PopularMoviesFra
 
             MovieDetailFragment fragment = new MovieDetailFragment();
             fragment.setArguments(args);
+
+            // Show the fragment now that it's been clicked on
+            mMovieDetailContainerFrameLayout.setVisibility(View.VISIBLE);
+            mFirstItemSelected = true;
+
+
 
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movie_detail_container, fragment, MOVIEDETAILFRAGMENT_TAG)
