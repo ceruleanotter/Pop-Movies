@@ -8,13 +8,14 @@
         android:layout_weight="2"
         android:layout_height="wrap_content"
         android:id="@+id/review_summary"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:layout_margin="16dp"/>
 
     <Button
         android:id="@+id/read_review_button"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:textColor="@android:color/white"
         android:text="Read Full Review"/>
 

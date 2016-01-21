@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<TextView
-    android:layout_width="0dp"
-    android:layout_weight="2"
-    android:layout_height="wrap_content"
-    android:id="@+id/trailer_name"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/trailer_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:singleLine="true"
+        android:layout_margin="16dp"/>
 
     <Button
         android:id="@+id/trailer_play_button"
         android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:text="Play Trailer"/>
+        android:text="Play Trailer"
+        android:textColor="@android:color/white" />
 
 
 </LinearLayout>
