@@ -8,9 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 
 
-public class PopularMovies extends AppCompatActivity implements PopularMoviesFragment.MovieClickCallback {
+public class PopularMovies extends AppCompatActivity implements PopularMoviesFragment.MovieClickCallback,
+MovieDetailFragment.starChangeCallback{
 
     String mCurrentSortBy;
     boolean mCurrentKidsMode;
@@ -18,6 +20,7 @@ public class PopularMovies extends AppCompatActivity implements PopularMoviesFra
     boolean mTwoPane;
     boolean mFirstItemSelected;
     FrameLayout mMovieDetailContainerFrameLayout;
+    GridView mMoviesGridView;
 
     final static String LOG_TAG = PopularMovies.class.getSimpleName();
     final static String MOVIEDETAILFRAGMENT_TAG = "MOVIE_DETAIL_FRAG_TAG";
@@ -136,5 +139,13 @@ public class PopularMovies extends AppCompatActivity implements PopularMoviesFra
             startActivity(intent);
         }
 
+    }
+
+    //This is called whenever a movie is unstarred
+    @Override
+    public void onStarChange() {
+        if (mTwoPane) {
+            ((PopularMoviesFragment)getSupportFragmentManager().findFragmentById(R.id.fragment)).onSettingsChange();
+        }
     }
 }

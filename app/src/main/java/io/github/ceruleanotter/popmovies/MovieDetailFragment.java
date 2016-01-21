@@ -252,8 +252,20 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         SharedPreferences.Editor editor = mStorage.edit();
         editor.putBoolean(Integer.toString(mID), b);
         editor.commit();
+        ((starChangeCallback)getActivity()).onStarChange();
     }
 
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of a star being unselected
+     */
+
+    public interface starChangeCallback {
+        /**
+         * MovieDetailFragmentCallback for when an item has been selected.
+         */
+        public void onStarChange();
+    }
 
 
 

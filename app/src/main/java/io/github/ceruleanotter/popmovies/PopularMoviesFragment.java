@@ -25,7 +25,7 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
     @InjectView(R.id.gridview_movies)
     GridView mGridView;
     PopularMoviesAdapter mMoviesAdapter;
-    private static final int MOVIES_LOADER = 0;
+    public static final int MOVIES_LOADER = 0;
 
     public PopularMoviesFragment() {
 
@@ -78,7 +78,6 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
                 }
             }
         });
-
 
         return rootView;
     }
