@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 
-public class MovieDetail extends AppCompatActivity {
+public class MovieDetailActivity extends AppCompatActivity {
 
     MovieDetailFragment mFragment;
     @Override

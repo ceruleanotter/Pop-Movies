@@ -67,7 +67,7 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
                             ((MovieClickCallback)getActivity()).onItemSelected(mMoviesAdapter.getmData().get(position).getmId());
 
                             //before tablet
-                           /* Intent intent = new Intent(getActivity(), MovieDetail.class);
+                           /* Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
                             intent.putExtra(MovieDetailFragment.ID_EXTRA,
                                     mMoviesAdapter.getmData().get(position).getmId());
 
@@ -103,7 +103,7 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
                 ((MovieClickCallback)getActivity()).onItemSelected(mMoviesAdapter.getmData().get(position).getmId());
 
                 //Original code with intent, before tablet
-                /*Intent intent = new Intent(getActivity(), MovieDetail.class);
+                /*Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
                 intent.putExtra(MovieDetailFragment.ID_EXTRA,
                         mMoviesAdapter.getmData().get(position).getmId());
 

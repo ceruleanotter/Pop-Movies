@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".PopularMovies"
+            android:name=".PopularMoviesActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,12 +27,12 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name=".MovieDetail"
+            android:name=".MovieDetailActivity"
             android:label="@string/title_activity_movie_detail"
-            android:parentActivityName=".PopularMovies" >
+            android:parentActivityName=".PopularMoviesActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="io.github.ceruleanotter.popmovies.PopularMovies" />
+                android:value="io.github.ceruleanotter.popmovies.PopularMoviesActivity" />
         </activity>
 
         <!-- Vungle Activities -->
