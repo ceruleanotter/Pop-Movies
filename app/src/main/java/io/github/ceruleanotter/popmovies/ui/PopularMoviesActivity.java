@@ -85,11 +85,12 @@ public class PopularMoviesActivity extends AppCompatActivity implements PopularM
 
         //Vungle support
         // get your App ID from the app's main page on the Vungle Dashboard after setting up your app
-        final String app_id = BuildConfig.APPLICATION_ID;
+        final String app_id = BuildConfig.VUNGLE_APP_ID;
 
         // initialize the Publisher SDK
         vunglePub.init(this, app_id);
 
+        Log.e(LOG_TAG, "app id is " + app_id);
 
     }
 

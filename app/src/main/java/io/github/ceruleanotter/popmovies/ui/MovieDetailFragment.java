@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.graphics.Palette;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import android.widget.ToggleButton;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.vungle.publisher.VunglePub;
 
 import java.text.SimpleDateFormat;
 
@@ -43,6 +45,9 @@ import io.github.ceruleanotter.popmovies.utils.PaletteTransformation;
  * A placeholder fragment containing a simple view.
  */
 public class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<PopMovie> {
+
+    // For Vungle
+    final VunglePub vunglePub = VunglePub.getInstance();
 
     String LOG_TAG = MovieDetailFragment.class.getSimpleName();
     int mID;
@@ -169,7 +174,13 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, currentLink ));
+                            Log.e(LOG_TAG, "Clicked");
+                            if (vunglePub.isAdPlayable())  {
+                                Log.e(LOG_TAG, "Playing add");
+                                vunglePub.playAd();
+                            }
+
+                            //startActivity(new Intent(Intent.ACTION_VIEW, currentLink ));
 
                         }
                     }
