@@ -25,6 +25,7 @@ android {
 
     buildTypes.each {
         it.buildConfigField 'String', 'VUNGLE_APP_ID', VungleAppId
+        it.buildConfigField 'String', 'MOVIE_DB_API_KEY', MovieDbApiKey
     }
 }
 

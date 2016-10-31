@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import io.github.ceruleanotter.popmovies.BuildConfig;
 import io.github.ceruleanotter.popmovies.R;
 import io.github.ceruleanotter.popmovies.model.MovieReview;
 import io.github.ceruleanotter.popmovies.model.MovieTrailer;
@@ -35,7 +36,7 @@ import io.github.ceruleanotter.popmovies.model.PopMovie;
 public class MovieDataParsingUtilities {
     public final static String LOG_TAG = MovieDataParsingUtilities.class.getSimpleName();
     // URL related constants
-    //http://api.themoviedb.org/3/discover/movie?api_key=3062e696db60daf1cebee8178aa5f103
+    //http://api.themoviedb.org/3/discover/movie?api_key=xxx
     final private static String MOVIE_URL_BASE = "http://api.themoviedb.org/3";
     final private static String NEW_MOVIE_BASE_URL = MOVIE_URL_BASE + "/discover/movie?";
     final private static String SINGLE_MOVIE_BASE_URL = MOVIE_URL_BASE + "/movie/";
@@ -45,7 +46,7 @@ public class MovieDataParsingUtilities {
     final private static String TRAILER_PATH_TO_APPEND_URL = "/videos";
     final private static String REVIEW_PATH_TO_APPEND_URL = "/reviews";
 
-    final private static String API_KEY = "3062e696db60daf1cebee8178aa5f103"; // TODO move this out of here
+    final private static String API_KEY = BuildConfig.MOVIE_DB_API_KEY;
 
     final private static String API_KEY_PARAM = "api_key";
     final private static String SORT_BY_PARAM = "sort_by";
@@ -71,7 +72,7 @@ public class MovieDataParsingUtilities {
     final private static String RUNTIME_JSON = "runtime";
     final private static String ID_JSON = "id";
 
-    //this is only in the specific movie http://api.themoviedb.org/3/movie/245891?api_key=3062e696db60daf1cebee8178aa5f103
+    //this is only in the specific movie http://api.themoviedb.org/3/movie/245891?api_key=xxx
     final private static String RELEASE_DATE_JSON = "release_date";
     final private static String USER_RATING_JSON = "vote_average";
 
