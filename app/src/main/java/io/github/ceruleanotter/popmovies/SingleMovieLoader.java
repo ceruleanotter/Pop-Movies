@@ -10,6 +10,7 @@ import android.util.Log;
 import java.net.URL;
 
 import io.github.ceruleanotter.popmovies.model.PopMovie;
+import io.github.ceruleanotter.popmovies.utils.MovieDataParsingUtilities;
 
 /**
  * Created by lyla on 6/4/15.

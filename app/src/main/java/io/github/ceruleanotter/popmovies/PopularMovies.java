@@ -14,6 +14,8 @@ import android.widget.GridView;
 
 import com.vungle.publisher.VunglePub;
 
+import io.github.ceruleanotter.popmovies.utils.MovieDataParsingUtilities;
+
 
 public class PopularMovies extends AppCompatActivity implements PopularMoviesFragment.MovieClickCallback,
         SharedPreferences.OnSharedPreferenceChangeListener {

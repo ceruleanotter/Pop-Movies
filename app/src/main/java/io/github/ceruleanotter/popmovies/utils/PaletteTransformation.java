@@ -1,4 +1,4 @@
-package io.github.ceruleanotter.popmovies;
+package io.github.ceruleanotter.popmovies.utils;
 
 import android.graphics.Bitmap;
 import android.support.v7.graphics.Palette;

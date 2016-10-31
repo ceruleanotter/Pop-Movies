@@ -34,6 +34,7 @@ import butterknife.InjectView;
 import io.github.ceruleanotter.popmovies.model.MovieReview;
 import io.github.ceruleanotter.popmovies.model.MovieTrailer;
 import io.github.ceruleanotter.popmovies.model.PopMovie;
+import io.github.ceruleanotter.popmovies.utils.PaletteTransformation;
 
 
 /**

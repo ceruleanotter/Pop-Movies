@@ -1,4 +1,4 @@
-package io.github.ceruleanotter.popmovies;
+package io.github.ceruleanotter.popmovies.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import io.github.ceruleanotter.popmovies.R;
 import io.github.ceruleanotter.popmovies.model.MovieReview;
 import io.github.ceruleanotter.popmovies.model.MovieTrailer;
 import io.github.ceruleanotter.popmovies.model.PopMovie;
