@@ -1,7 +1,9 @@
 package io.github.ceruleanotter.popmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -14,7 +16,7 @@ import com.vungle.publisher.VunglePub;
 
 
 public class PopularMovies extends AppCompatActivity implements PopularMoviesFragment.MovieClickCallback,
-        MovieDetailFragment.starChangeCallback {
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     /**
@@ -35,9 +37,13 @@ public class PopularMovies extends AppCompatActivity implements PopularMoviesFra
     final static String MOVIEDETAILFRAGMENT_TAG = "MOVIE_DETAIL_FRAG_TAG";
     final static String BUNDLE_EXTRA_FIRST_ITEM_SELECTED = "FIRST_ITEM_SELECTED";
 
+
+    private static boolean PREFERENCES_CHANGE_FLAG;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PREFERENCES_CHANGE_FLAG = false;
         mCurrentSortBy = MovieDataParsingUtilities.getSortByPreference(this);
         mCurrentKidsMode = MovieDataParsingUtilities.getKidsModePreference(this);
         mStarMode = MovieDataParsingUtilities.getStarModePreference(this);
@@ -69,6 +75,9 @@ public class PopularMovies extends AppCompatActivity implements PopularMoviesFra
             //getSupportActionBar().setElevation(0f);
         }
 
+
+        // Register preference change listener
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
         //Vungle support
         // get your App ID from the app's main page on the Vungle Dashboard after setting up your app
@@ -105,23 +114,27 @@ public class PopularMovies extends AppCompatActivity implements PopularMoviesFra
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Register preference change listener
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        if (PREFERENCES_CHANGE_FLAG) {
+            mCurrentSortBy = MovieDataParsingUtilities.getSortByPreference(this);
+            mCurrentKidsMode = MovieDataParsingUtilities.getKidsModePreference(this);
+            mStarMode = MovieDataParsingUtilities.getStarModePreference(this);
+            ((PopularMoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment)).onSettingsChange();
+            PREFERENCES_CHANGE_FLAG = false;
+        }
 
         // For Vungle
         vunglePub.onResume();
 
-        String sortByNow = MovieDataParsingUtilities.getSortByPreference(this);
-        boolean kidsByNow = MovieDataParsingUtilities.getKidsModePreference(this);
-        boolean starModeByNow = MovieDataParsingUtilities.getStarModePreference(this);
-        if (!(sortByNow.equals(mCurrentSortBy)) ||
-                !(kidsByNow == mCurrentKidsMode) ||
-                !(starModeByNow == mStarMode)) {
-            ((PopularMoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment)).onSettingsChange();
-            mCurrentSortBy = sortByNow;
-            mCurrentKidsMode = kidsByNow;
-            mStarMode = starModeByNow;
-        }
+
     }
 
     @Override
@@ -167,13 +180,9 @@ public class PopularMovies extends AppCompatActivity implements PopularMoviesFra
 
     }
 
-    //This is called whenever a movie is unstarred
     @Override
-    public void onStarChange() {
-        if (mTwoPane) {
-            ((PopularMoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment)).onSettingsChange();
-        }
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // If the preferences change, update the preferences and reload the data when you come back
+        PREFERENCES_CHANGE_FLAG = true;
     }
-
-
 }
