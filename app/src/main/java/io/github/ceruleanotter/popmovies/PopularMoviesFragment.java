@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import io.github.ceruleanotter.popmovies.model.PopMovie;
 
 
 /**

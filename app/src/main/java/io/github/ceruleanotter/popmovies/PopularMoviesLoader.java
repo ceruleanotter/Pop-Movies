@@ -11,6 +11,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
+import io.github.ceruleanotter.popmovies.model.PopMovie;
+
 /**
  * Created by lyla on 6/4/15.
  */

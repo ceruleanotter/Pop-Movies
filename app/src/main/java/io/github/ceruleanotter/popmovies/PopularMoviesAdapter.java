@@ -18,6 +18,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import io.github.ceruleanotter.popmovies.model.PopMovie;
+
 /**
  * Created by lyla on 6/4/15.
  */

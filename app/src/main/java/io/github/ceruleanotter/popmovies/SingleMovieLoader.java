@@ -9,6 +9,8 @@ import android.util.Log;
 
 import java.net.URL;
 
+import io.github.ceruleanotter.popmovies.model.PopMovie;
+
 /**
  * Created by lyla on 6/4/15.
  */

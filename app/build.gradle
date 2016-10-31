@@ -6,13 +6,13 @@ repositories {
 
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 25
     buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "io.github.ceruleanotter.popmovies"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
@@ -30,11 +30,11 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:6.1.0'
-    compile 'com.android.support:support-v4:22.2.0'
-    compile 'com.android.support:palette-v7:22.2.0'
+    compile 'com.android.support:support-v4:25.0.0'
+    compile 'com.android.support:palette-v7:25.0.0'
 
 }
 

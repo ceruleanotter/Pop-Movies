@@ -31,6 +31,9 @@ import java.text.SimpleDateFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import io.github.ceruleanotter.popmovies.model.MovieReview;
+import io.github.ceruleanotter.popmovies.model.MovieTrailer;
+import io.github.ceruleanotter.popmovies.model.PopMovie;
 
 
 /**

@@ -1,4 +1,4 @@
-package io.github.ceruleanotter.popmovies;
+package io.github.ceruleanotter.popmovies.model;
 
 import java.util.ArrayList;
 import java.util.Date;
