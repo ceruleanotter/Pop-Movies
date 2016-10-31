@@ -27,6 +27,7 @@ import android.widget.ToggleButton;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.vungle.publisher.EventListener;
 import com.vungle.publisher.VunglePub;
 
 import java.text.SimpleDateFormat;
@@ -44,7 +45,8 @@ import io.github.ceruleanotter.popmovies.utils.PaletteTransformation;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<PopMovie> {
+public class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<PopMovie>,
+        EventListener{
 
     // For Vungle
     final VunglePub vunglePub = VunglePub.getInstance();
@@ -88,6 +90,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
 
     SharedPreferences mStorage;
+
+    Uri mTrailerToView;
 
     public MovieDetailFragment() {
 
@@ -179,6 +183,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                                 Log.e(LOG_TAG, "Playing add");
                                 vunglePub.playAd();
                             }
+                            mTrailerToView = currentLink;
 
                             //startActivity(new Intent(Intent.ACTION_VIEW, currentLink ));
 
@@ -202,7 +207,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                         @Override
                         public void onClick(View view) {
                             startActivity(new Intent(Intent.ACTION_VIEW, currentLink));
-
                         }
                     }
             );
@@ -270,4 +274,30 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         editor.commit();
     }
 
+    @Override
+    public void onAdEnd(boolean wasSuccessfulView, boolean wasCallToActionClicked) {
+        if (wasSuccessfulView) {
+            startActivity(new Intent(Intent.ACTION_VIEW, mTrailerToView));
+        }
+    }
+
+    @Override
+    public void onAdStart() {
+        //nothing
+    }
+
+    @Override
+    public void onAdUnavailable(String s) {
+        //nothing -- TODO just show them what they want
+    }
+
+    @Override
+    public void onAdPlayableChanged(boolean b) {
+        //nothing
+    }
+
+    @Override
+    public void onVideoView(boolean b, int i, int i1) {
+        //nothing
+    }
 }

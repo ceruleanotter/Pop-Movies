@@ -30,6 +30,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.movie_detail_container, fragment)
                 .commit();
+
+        vunglePub.setEventListeners(fragment);
     }
 
     @Override
@@ -44,4 +46,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         vunglePub.onResume();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        vunglePub.clearEventListeners();
+    }
 }

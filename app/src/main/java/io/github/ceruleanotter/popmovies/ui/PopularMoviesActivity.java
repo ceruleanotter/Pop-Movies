@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 
+import com.vungle.publisher.AdConfig;
 import com.vungle.publisher.VunglePub;
 
 import io.github.ceruleanotter.popmovies.BuildConfig;
@@ -89,6 +90,9 @@ public class PopularMoviesActivity extends AppCompatActivity implements PopularM
 
         // initialize the Publisher SDK
         vunglePub.init(this, app_id);
+
+        final AdConfig globalAdConfig = vunglePub.getGlobalAdConfig();
+        globalAdConfig.setBackButtonImmediatelyEnabled(true);
 
         Log.e(LOG_TAG, "app id is " + app_id);
 
