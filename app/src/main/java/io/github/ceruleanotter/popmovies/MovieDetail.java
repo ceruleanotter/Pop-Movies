@@ -28,5 +28,4 @@ public class MovieDetail extends AppCompatActivity {
 
     }
 
-
 }
