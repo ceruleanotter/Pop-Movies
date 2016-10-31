@@ -363,6 +363,6 @@ public class MovieDataParsingUtilities {
 
     public static boolean getStarModePreference(Context c) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
-        return sharedPreferences.getBoolean("starmode", false);
+        return sharedPreferences.getBoolean(c.getString(R.string.pref_star_mode_key), false);
     }
 }

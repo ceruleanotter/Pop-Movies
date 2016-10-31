@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.squareup.picasso.Callback;
@@ -162,11 +163,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Log.e(LOG_TAG, "Clicked");
-                            if (vunglePub.isAdPlayable()) {
-                                Log.e(LOG_TAG, "Playing add");
-                                vunglePub.playAd();
-                            }
+                            vunglePub.playAd(); // Try to play the add, if the add is unavailable, it will go
+                            // directly to wifi
+
                             // Set the link to show after the vungle add is finished playing
                             mTrailerToView = currentLink;
                         }
@@ -233,7 +232,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     }
 
     @Override
-    public void onLoaderReset(Loader<PopMovie> loader) {}
+    public void onLoaderReset(Loader<PopMovie> loader) {
+    }
 
     public int getmID() {
         return mID;
@@ -246,11 +246,15 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         editor.commit();
     }
 
-    /** Vungle Callbacks **/
+    /**
+     * Vungle Callbacks
+     **/
     @Override
     public void onAdEnd(boolean wasSuccessfulView, boolean wasCallToActionClicked) {
         if (wasSuccessfulView) {
             startActivity(new Intent(Intent.ACTION_VIEW, mTrailerToView));
+        } else {
+            Toast.makeText(this.getContext(), R.string.toast_watch_vungle, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -261,7 +265,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onAdUnavailable(String s) {
-        //nothing -- TODO just show them what they want
+        // If the add won't load, take them to the trailer
+        // This will occur if they are not on wifi connections
+        startActivity(new Intent(Intent.ACTION_VIEW, mTrailerToView));
     }
 
     @Override
