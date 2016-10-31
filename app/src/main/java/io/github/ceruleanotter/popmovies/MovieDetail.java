@@ -23,9 +23,6 @@ public class MovieDetail extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.movie_detail_container, fragment)
                 .commit();
-
-        //mFragment = (MovieDetailFragment)getSupportFragmentManager().findFragmentById(R.id.fragment);
-
     }
 
 
