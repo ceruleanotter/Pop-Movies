@@ -30,7 +30,6 @@ public class PopularMoviesAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
 
 
-
     private ArrayList<PopMovie> mData;
 
 
@@ -64,14 +63,14 @@ public class PopularMoviesAdapter extends BaseAdapter {
         final FrameLayout containerView;
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
-             containerView = (FrameLayout)LayoutInflater.from(mContext).inflate(R.layout.item_movie_gridview, parent, false);
+            containerView = (FrameLayout) mInflater.inflate(R.layout.item_movie_gridview, parent, false);
 
             final GridView gv = (GridView) parent;
             GridView.LayoutParams params = new GridView.LayoutParams(
                     GridView.LayoutParams.MATCH_PARENT,
                     GridView.LayoutParams.MATCH_PARENT);
-            params.width = (gv.getWidth()/gv.getNumColumns());
-            params.height = (int)Math.round(params.width*1.5);
+            params.width = (gv.getWidth() / gv.getNumColumns());
+            params.height = (int) Math.round(params.width * 1.5);
             containerView.setLayoutParams(params);
 
 
@@ -81,20 +80,18 @@ public class PopularMoviesAdapter extends BaseAdapter {
         }
 
 
-
         if (mData != null && position < mData.size()) {
-            //ImageView imageView = new ImageView(mContext);
             final PopMovie currentData = mData.get(position);
 
             final ImageView imageView = (ImageView) containerView.findViewById(R.id.item_poster_imageview);
 
             Picasso.with(mContext).load(currentData.getmImageURL()).into(imageView, new Callback.EmptyCallback() {
-               @Override
+                @Override
                 public void onSuccess() {
-                   containerView.setVisibility(View.VISIBLE);
-                   imageView.setVisibility(View.VISIBLE);
-                   TextView tv = (TextView) containerView.findViewById(R.id.item_title_textview);
-                   tv.setVisibility(View.INVISIBLE);
+                    containerView.setVisibility(View.VISIBLE);
+                    imageView.setVisibility(View.VISIBLE);
+                    TextView tv = (TextView) containerView.findViewById(R.id.item_title_textview);
+                    tv.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
@@ -108,7 +105,6 @@ public class PopularMoviesAdapter extends BaseAdapter {
                 }
             });
         } else {
-            //THIS IS A PROBLEM
             Log.e(LOG_TAG, "mData is null or the position is strange");
         }
 
@@ -146,9 +142,5 @@ public class PopularMoviesAdapter extends BaseAdapter {
                     }
                 });
     }
-
-
-
-
 
 }

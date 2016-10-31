@@ -35,17 +35,14 @@ public class PopularMoviesLoader extends AsyncTaskLoader<ArrayList<PopMovie>> {
         ArrayList<PopMovie> toReturn = null;
         boolean starMode = MovieDataParsingUtilities.getStarModePreference(mContext);
 
-
-
         if (starMode) {
             toReturn = new ArrayList<PopMovie>();
             //getting all of the url data from each starred movie
             SharedPreferences favorites = mContext.getSharedPreferences(MovieDetailFragment.STAR_DATASTORE, Context.MODE_PRIVATE);
             Map<String, ?> favoritesMap = favorites.getAll();
-            for (Map.Entry<String, ?> movieStatus : favoritesMap.entrySet())
-            {
+            for (Map.Entry<String, ?> movieStatus : favoritesMap.entrySet()) {
                 if (movieStatus.getValue() instanceof Boolean && movieStatus.getValue().equals(Boolean.TRUE)) {
-                    URL currentURL = MovieDataParsingUtilities.getSingleMovieURLHelper(Integer.parseInt(movieStatus.getKey()),"");
+                    URL currentURL = MovieDataParsingUtilities.getSingleMovieURLHelper(Integer.parseInt(movieStatus.getKey()), "");
                     String currentJSON = MovieDataParsingUtilities.getJSONFromWeb(currentURL);
                     PopMovie currentMovie = MovieDataParsingUtilities.movieFromJson(currentJSON);
                     toReturn.add(0, currentMovie);
@@ -64,7 +61,6 @@ public class PopularMoviesLoader extends AsyncTaskLoader<ArrayList<PopMovie>> {
                 e.printStackTrace();
             }
         }
-
 
 
         return toReturn;

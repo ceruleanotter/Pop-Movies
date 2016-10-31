@@ -13,7 +13,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     // For Vungle
     final VunglePub vunglePub = VunglePub.getInstance();
 
-    MovieDetailFragment mFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

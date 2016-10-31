@@ -42,19 +42,16 @@ public class MovieDataParsingUtilities {
     final private static String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w342";
     final private static String BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w500";
 
-    final private static String TRAILER_PATH_TO_APPEND_URL ="/videos";
-    final private static String REVIEW_PATH_TO_APPEND_URL ="/reviews";
+    final private static String TRAILER_PATH_TO_APPEND_URL = "/videos";
+    final private static String REVIEW_PATH_TO_APPEND_URL = "/reviews";
 
-
-
-    final private static String API_KEY = "3062e696db60daf1cebee8178aa5f103";
+    final private static String API_KEY = "3062e696db60daf1cebee8178aa5f103"; // TODO move this out of here
 
     final private static String API_KEY_PARAM = "api_key";
     final private static String SORT_BY_PARAM = "sort_by";
     final private static String CERT_COUNTRY_PARAM = "certification_country";
     final private static String CERTIFICATION_LEVEL_PARAM = "certification.lte";
     final private static String RELEASE_DATE_PARAM = "release_date.lte";
-
 
     //public sort by options
     final public static String SORT_BY_POPULAR = "popularity.desc";
@@ -84,16 +81,12 @@ public class MovieDataParsingUtilities {
     private static final String TRAILER_SITE_JSON = "site";
     private static final String TRAILER_YOUTUBE_VALUE_JSON = "YouTube";
     private static final String YOUTUBE_ID_PARAM = "v";
-    private static final String TRAILER_YOUTUBE_KEY_JSON = "key" ;
+    private static final String TRAILER_YOUTUBE_KEY_JSON = "key";
     private static final String TRAILER_NAME_JSON = "name";
 
     final private static String REVIEW_RESULT_JSON = "results";
     final private static String REVIEW_ID_JSON = "id";
     final private static String REVIEW_CONTENT_JSON = "content";
-
-    //reviews http://api.themoviedb.org/3/movie/245891/reviews?api_key=3062e696db60daf1cebee8178aa5f103
-
-    //Review url https://www.themoviedb.org/review/55910381c3a36807f900065d?language=en
 
     final private static String URL_SINGLE_REVIEW = "https://www.themoviedb.org/review";
     final private static String REVIEW_LANG_PARAM_KEY = "language";
@@ -106,7 +99,6 @@ public class MovieDataParsingUtilities {
         String sortByParamValue;
         String sortBy = getSortByPreference(c);
         boolean kidsMode = getKidsModePreference(c);
-        boolean starMode = getStarModePreference(c);
 
         //wish there was some way to associate with the array in strings_activity_settings itself
         switch (sortBy) {
@@ -126,9 +118,6 @@ public class MovieDataParsingUtilities {
         }
         Date today = Calendar.getInstance().getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-
-
 
 
         Uri.Builder b = Uri.parse(NEW_MOVIE_BASE_URL).buildUpon()
@@ -153,8 +142,6 @@ public class MovieDataParsingUtilities {
         }
         return url;
     }
-
-
 
 
     public static URL getUrlForSpecificMovie(int id) {
@@ -227,7 +214,6 @@ public class MovieDataParsingUtilities {
         String plot = "No overview provided.";
 
 
-
         try {
             JSONObject currentMovie = new JSONObject(movieJSON);
 
@@ -259,7 +245,7 @@ public class MovieDataParsingUtilities {
         ArrayList<MovieTrailer> trailers = (trailerJSON == null) ? null : trailerUriListFromJson(trailerJSON);
         ArrayList<MovieReview> reviews = (reviewJSON == null) ? null : reviewUriListFromJson(reviewJSON);
 
-        return new PopMovie(backdropURL, imageURL, title, plot, runtime, releaseDate, userRating, id,trailers, reviews);
+        return new PopMovie(backdropURL, imageURL, title, plot, runtime, releaseDate, userRating, id, trailers, reviews);
     }
 
     public static ArrayList<MovieTrailer> trailerUriListFromJson(String trailerJSON) {
@@ -267,15 +253,15 @@ public class MovieDataParsingUtilities {
         ArrayList<MovieTrailer> trailers = new ArrayList<MovieTrailer>();
         try {
             JSONArray listOfTrailers = new JSONObject(trailerJSON).getJSONArray(TRAILER_RESULT_JSON);
-           for (int i = 0; i< listOfTrailers.length(); i++) {
-               JSONObject currentTrailer = listOfTrailers.getJSONObject(i);
-               if (currentTrailer.getString(TRAILER_SITE_JSON).equals(TRAILER_YOUTUBE_VALUE_JSON)) {
-                   trailers.add(new MovieTrailer(currentTrailer.getString(TRAILER_NAME_JSON),
-                           Uri.parse(URL_YOUTUBE).buildUpon().appendQueryParameter(
-                           YOUTUBE_ID_PARAM, currentTrailer.getString(TRAILER_YOUTUBE_KEY_JSON))
-                           .build()));
-               }
-           }
+            for (int i = 0; i < listOfTrailers.length(); i++) {
+                JSONObject currentTrailer = listOfTrailers.getJSONObject(i);
+                if (currentTrailer.getString(TRAILER_SITE_JSON).equals(TRAILER_YOUTUBE_VALUE_JSON)) {
+                    trailers.add(new MovieTrailer(currentTrailer.getString(TRAILER_NAME_JSON),
+                            Uri.parse(URL_YOUTUBE).buildUpon().appendQueryParameter(
+                                    YOUTUBE_ID_PARAM, currentTrailer.getString(TRAILER_YOUTUBE_KEY_JSON))
+                                    .build()));
+                }
+            }
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -283,22 +269,20 @@ public class MovieDataParsingUtilities {
         return trailers;
     }
 
-
     public static ArrayList<MovieReview> reviewUriListFromJson(String reviewJSON) {
         ArrayList<MovieReview> reviews = new ArrayList<MovieReview>();
         try {
             JSONArray listOfReviews = new JSONObject(reviewJSON).getJSONArray(REVIEW_RESULT_JSON);
-            for (int i = 0; i< listOfReviews.length(); i++) {
-
+            for (int i = 0; i < listOfReviews.length(); i++) {
 
 
                 JSONObject currentReview = listOfReviews.getJSONObject(i);
 
-                    reviews.add(new MovieReview(currentReview.getString(REVIEW_CONTENT_JSON),
-                            Uri.parse(String.format(URL_SINGLE_REVIEW)).buildUpon()
-                                    .appendPath(currentReview.getString(REVIEW_ID_JSON))
-                                    .appendQueryParameter(REVIEW_LANG_PARAM_KEY, REVIEW_LANG_PARAM_VALUE_ENGLISH)
-                                    .build()));
+                reviews.add(new MovieReview(currentReview.getString(REVIEW_CONTENT_JSON),
+                        Uri.parse(String.format(URL_SINGLE_REVIEW)).buildUpon()
+                                .appendPath(currentReview.getString(REVIEW_ID_JSON))
+                                .appendQueryParameter(REVIEW_LANG_PARAM_KEY, REVIEW_LANG_PARAM_VALUE_ENGLISH)
+                                .build()));
 
             }
         } catch (JSONException e) {
@@ -317,7 +301,7 @@ public class MovieDataParsingUtilities {
         String moviesJSON = "";
 
         try {
-            // Create the request to OpenWeatherMap, and open the connection
+            // Create the request to MoviesDb, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -340,16 +324,14 @@ public class MovieDataParsingUtilities {
             }
 
             if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
                 return "";
             }
             moviesJSON = buffer.toString();
             return moviesJSON;
 
-
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attempting
+            // If the code didn't successfully get the data, there's no point in attempting
             // to parse it.
         } finally {
             if (urlConnection != null) {
@@ -377,7 +359,6 @@ public class MovieDataParsingUtilities {
         boolean kidsmode = sharedPref.getBoolean(c.getString(R.string.pref_kids_mode_key), false);
         return kidsmode;
     }
-
 
     public static boolean getStarModePreference(Context c) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);

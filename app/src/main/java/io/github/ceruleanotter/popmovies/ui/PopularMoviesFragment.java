@@ -61,7 +61,6 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
                     // here you can get the measured dimensions
 
                     mGridView.setAdapter(mMoviesAdapter);
-                    // mMoviesAdapter.notifyDataSetChanged();
                     mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         public void onItemClick(AdapterView<?> parent, View v,
                                                 int position, long id) {
@@ -97,13 +96,6 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
                                     int position, long id) {
 
                 ((MovieClickCallback)getActivity()).onItemSelected(mMoviesAdapter.getmData().get(position).getmId());
-
-                //Original code with intent, before tablet
-                /*Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                intent.putExtra(MovieDetailFragment.ID_EXTRA,
-                        mMoviesAdapter.getmData().get(position).getmId());
-
-                startActivity(intent);*/
             }
         });
     }
@@ -132,7 +124,7 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
         /**
          * MovieDetailFragmentCallback for when an item has been selected.
          */
-        public void onItemSelected(int MovieID);
+        void onItemSelected(int MovieID);
     }
 
 }

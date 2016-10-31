@@ -22,7 +22,6 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
     PopMovie mData;
     int mId;
 
-
     public SingleMovieLoader(MovieDetailFragment df) {
         super(df.getActivity());
         mId = df.getmID();
@@ -30,7 +29,6 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
 
     @Override
     public PopMovie loadInBackground() {
-
         URL newMoviesUrl = MovieDataParsingUtilities.getUrlForNewMovies(getContext());
         Log.e(LOG_TAG, "Starting load for " + newMoviesUrl.toString());
         PopMovie toReturn = null;
@@ -39,13 +37,11 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
         URL trailerURL = MovieDataParsingUtilities.getUrlForSpecificMovieTrailer(mId);
         URL reviewsURL = MovieDataParsingUtilities.getUrlForSpecificMovieReviews(mId);
 
-
         String movieJSON = MovieDataParsingUtilities.getJSONFromWeb(movieURL);
         String trailerJSON = MovieDataParsingUtilities.getJSONFromWeb(trailerURL);
         String reviewJSON = MovieDataParsingUtilities.getJSONFromWeb(reviewsURL);
 
         toReturn = MovieDataParsingUtilities.movieFromJson(movieJSON, trailerJSON, reviewJSON);
-
 
         return toReturn;
     }
@@ -119,7 +115,6 @@ public class SingleMovieLoader extends AsyncTaskLoader<PopMovie> {
     }
 
     protected void onReleaseResources(PopMovie data) {
-
         //  nothing to do.
     }
 

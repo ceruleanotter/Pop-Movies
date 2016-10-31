@@ -22,7 +22,7 @@ import io.github.ceruleanotter.popmovies.R;
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
 
-
+    // TODO should use settings fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -36,7 +36,6 @@ public class PopularMoviesActivity extends AppCompatActivity implements PopularM
     boolean mTwoPane;
     boolean mFirstItemSelected;
     FrameLayout mMovieDetailContainerFrameLayout;
-    GridView mMoviesGridView;
 
     final static String LOG_TAG = PopularMoviesActivity.class.getSimpleName();
     final static String MOVIEDETAILFRAGMENT_TAG = "MOVIE_DETAIL_FRAG_TAG";
@@ -80,7 +79,6 @@ public class PopularMoviesActivity extends AppCompatActivity implements PopularM
             //getSupportActionBar().setElevation(0f);
         }
 
-
         // Register preference change listener
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
@@ -118,7 +116,6 @@ public class PopularMoviesActivity extends AppCompatActivity implements PopularM
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -142,7 +139,6 @@ public class PopularMoviesActivity extends AppCompatActivity implements PopularM
 
         // For Vungle
         vunglePub.onResume();
-
 
     }
 
@@ -174,7 +170,6 @@ public class PopularMoviesActivity extends AppCompatActivity implements PopularM
             mMovieDetailContainerFrameLayout.setVisibility(View.VISIBLE);
             mFirstItemSelected = true;
 
-
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movie_detail_container, fragment, MOVIEDETAILFRAGMENT_TAG)
                     .commit();
@@ -183,10 +178,8 @@ public class PopularMoviesActivity extends AppCompatActivity implements PopularM
             Intent intent = new Intent(this, MovieDetailActivity.class);
             intent.putExtra(MovieDetailFragment.ID_INTENT_EXTRA,
                     movieID);
-
             startActivity(intent);
         }
-
     }
 
     @Override

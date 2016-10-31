@@ -46,7 +46,7 @@ import io.github.ceruleanotter.popmovies.utils.PaletteTransformation;
  * A placeholder fragment containing a simple view.
  */
 public class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<PopMovie>,
-        EventListener{
+        EventListener {
 
     // For Vungle
     final VunglePub vunglePub = VunglePub.getInstance();
@@ -81,16 +81,13 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     RelativeLayout mTitleBarLayout;
 
 
-
     @InjectView(R.id.root_trailers_linear_layout)
     LinearLayout mRootLayoutForTrailers;
 
     @InjectView(R.id.root_reviews_linear_layout)
     LinearLayout mRootLayoutForReviews;
 
-
     SharedPreferences mStorage;
-
     Uri mTrailerToView;
 
     public MovieDetailFragment() {
@@ -102,13 +99,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
-
-
-
-
         //For ButterKnife view injection
         ButterKnife.inject(this, rootView);
-
 
         //Get the id from the bundle
         Bundle arguments = getArguments();
@@ -117,9 +109,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             getLoaderManager().initLoader(MOVIE_LOADER, null, this);
         }
         mStorage = getActivity().getSharedPreferences(STAR_DATASTORE, Context.MODE_PRIVATE);
-
-
-
 
         return rootView;
     }
@@ -132,15 +121,12 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoadFinished(Loader<PopMovie> loader, PopMovie data) {
 
-
         if (data.getmId() == -1)
             return;
         mTitleTextView.setText(data.getmTitle());
-
         mPlotTextView.setText(data.getmPlot());
 
         String year = "Unknown year";
-
 
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy");
@@ -155,8 +141,8 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         mBackdropImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Picasso.with(getActivity()).load(data.getmBackdropURL()).into(mBackdropImageView);
 
-        //Star Stuff
-        mStar.setChecked(mStorage.getBoolean(Integer.toString(mID),false));
+        //Star setup
+        mStar.setChecked(mStorage.getBoolean(Integer.toString(mID), false));
         mStar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -165,41 +151,34 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         });
 
 
-
-
         //Add trailers
         LayoutInflater lf = (LayoutInflater) getActivity().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         for (MovieTrailer t : data.getmTrailers()) {
-            LinearLayout currentMovieTrailerLayout = (LinearLayout)lf.inflate(R.layout.item_trailer, null);
-            ((TextView)currentMovieTrailerLayout.findViewById(R.id.trailer_name)).setText(t.getmName());
+            LinearLayout currentMovieTrailerLayout = (LinearLayout) lf.inflate(R.layout.item_trailer, null);
+            ((TextView) currentMovieTrailerLayout.findViewById(R.id.trailer_name)).setText(t.getmName());
             final Uri currentLink = t.getmUri();
             ((Button) currentMovieTrailerLayout.findViewById(R.id.trailer_play_button)).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Log.e(LOG_TAG, "Clicked");
-                            if (vunglePub.isAdPlayable())  {
+                            if (vunglePub.isAdPlayable()) {
                                 Log.e(LOG_TAG, "Playing add");
                                 vunglePub.playAd();
                             }
+                            // Set the link to show after the vungle add is finished playing
                             mTrailerToView = currentLink;
-
-                            //startActivity(new Intent(Intent.ACTION_VIEW, currentLink ));
-
                         }
                     }
             );
-
             mRootLayoutForTrailers.addView(currentMovieTrailerLayout);
-
-
         }
 
         //Add reviews
         for (MovieReview r : data.getmReviews()) {
-            LinearLayout currentMovieReviewLayout = (LinearLayout)lf.inflate(R.layout.item_review, null);
-            ((TextView)currentMovieReviewLayout.findViewById(R.id.review_summary)).setText(r.getmReviewText());
+            LinearLayout currentMovieReviewLayout = (LinearLayout) lf.inflate(R.layout.item_review, null);
+            ((TextView) currentMovieReviewLayout.findViewById(R.id.review_summary)).setText(r.getmReviewText());
             final Uri currentLink = r.getmUri();
             Button b = (Button) currentMovieReviewLayout.findViewById(R.id.read_review_button);
             b.setOnClickListener(
@@ -210,8 +189,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                         }
                     }
             );
-
-
             mRootLayoutForReviews.addView(currentMovieReviewLayout);
         }
 
@@ -231,9 +208,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                             int color = Color.HSVToColor(vibrant);
                             mTitleBarLayout.setBackgroundColor(color);
                             setButtonColors(color);
-
                         }
-
                     }
 
                     @Override
@@ -244,24 +219,21 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     }
 
     private void setButtonColors(int color) {
-
-        for(int i = 0; i < mRootLayoutForTrailers.getChildCount(); i++) {
-            LinearLayout currentItem = (LinearLayout)mRootLayoutForTrailers.getChildAt(i);
-            Button b = (Button)currentItem.findViewById(R.id.trailer_play_button);
+        for (int i = 0; i < mRootLayoutForTrailers.getChildCount(); i++) {
+            LinearLayout currentItem = (LinearLayout) mRootLayoutForTrailers.getChildAt(i);
+            Button b = (Button) currentItem.findViewById(R.id.trailer_play_button);
             b.setBackgroundColor(color);
         }
-        for(int i = 0; i < mRootLayoutForReviews.getChildCount(); i++) {
-            LinearLayout currentItem = (LinearLayout)mRootLayoutForReviews.getChildAt(i);
-            Button b = (Button)currentItem.findViewById(R.id.read_review_button);
+        for (int i = 0; i < mRootLayoutForReviews.getChildCount(); i++) {
+            LinearLayout currentItem = (LinearLayout) mRootLayoutForReviews.getChildAt(i);
+            Button b = (Button) currentItem.findViewById(R.id.read_review_button);
             b.setBackgroundColor(color);
         }
 
     }
 
     @Override
-    public void onLoaderReset(Loader<PopMovie> loader) {
-
-    }
+    public void onLoaderReset(Loader<PopMovie> loader) {}
 
     public int getmID() {
         return mID;
@@ -274,6 +246,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         editor.commit();
     }
 
+    /** Vungle Callbacks **/
     @Override
     public void onAdEnd(boolean wasSuccessfulView, boolean wasCallToActionClicked) {
         if (wasSuccessfulView) {
