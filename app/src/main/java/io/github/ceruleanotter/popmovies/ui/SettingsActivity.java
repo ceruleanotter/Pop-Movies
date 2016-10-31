@@ -1,4 +1,4 @@
-package io.github.ceruleanotter.popmovies;
+package io.github.ceruleanotter.popmovies.ui;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -8,6 +8,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+
+import io.github.ceruleanotter.popmovies.R;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.

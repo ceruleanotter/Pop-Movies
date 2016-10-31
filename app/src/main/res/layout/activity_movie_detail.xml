@@ -3,5 +3,5 @@ xmlns:tools="http://schemas.android.com/tools"
 android:id="@+id/movie_detail_container"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context="io.github.ceruleanotter.popmovies.MovieDetailActivity"
+tools:context="io.github.ceruleanotter.popmovies.ui.MovieDetailActivity"
 tools:ignore="MergeRootFrame" />

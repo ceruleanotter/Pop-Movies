@@ -1,4 +1,4 @@
-package io.github.ceruleanotter.popmovies;
+package io.github.ceruleanotter.popmovies.loaders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import io.github.ceruleanotter.popmovies.model.PopMovie;
+import io.github.ceruleanotter.popmovies.ui.MovieDetailFragment;
 import io.github.ceruleanotter.popmovies.utils.MovieDataParsingUtilities;
 
 /**

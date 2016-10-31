@@ -1,4 +1,4 @@
-package io.github.ceruleanotter.popmovies;
+package io.github.ceruleanotter.popmovies.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +14,8 @@ import android.widget.GridView;
 
 import com.vungle.publisher.VunglePub;
 
+import io.github.ceruleanotter.popmovies.BuildConfig;
+import io.github.ceruleanotter.popmovies.R;
 import io.github.ceruleanotter.popmovies.utils.MovieDataParsingUtilities;
 
 

@@ -1,4 +1,4 @@
-package io.github.ceruleanotter.popmovies;
+package io.github.ceruleanotter.popmovies.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +31,8 @@ import java.text.SimpleDateFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import io.github.ceruleanotter.popmovies.R;
+import io.github.ceruleanotter.popmovies.loaders.SingleMovieLoader;
 import io.github.ceruleanotter.popmovies.model.MovieReview;
 import io.github.ceruleanotter.popmovies.model.MovieTrailer;
 import io.github.ceruleanotter.popmovies.model.PopMovie;

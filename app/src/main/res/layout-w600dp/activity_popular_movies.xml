@@ -13,7 +13,7 @@
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" android:id="@+id/fragment"
-        android:name="io.github.ceruleanotter.popmovies.PopularMoviesFragment"
+        android:name="io.github.ceruleanotter.popmovies.ui.PopularMoviesFragment"
         tools:layout="@layout/fragment_popular_movies"
         android:layout_weight="1"
         android:layout_width="0dp"

@@ -1,4 +1,4 @@
-package io.github.ceruleanotter.popmovies;
+package io.github.ceruleanotter.popmovies.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import io.github.ceruleanotter.popmovies.loaders.PopularMoviesLoader;
+import io.github.ceruleanotter.popmovies.R;
 import io.github.ceruleanotter.popmovies.model.PopMovie;
 
 
@@ -66,12 +68,6 @@ public class PopularMoviesFragment extends Fragment implements LoaderManager.Loa
 
                             ((MovieClickCallback)getActivity()).onItemSelected(mMoviesAdapter.getmData().get(position).getmId());
 
-                            //before tablet
-                           /* Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                            intent.putExtra(MovieDetailFragment.ID_EXTRA,
-                                    mMoviesAdapter.getmData().get(position).getmId());
-
-                            startActivity(intent);*/
                         }
                     });
                     ViewTreeObserver obs = mGridView.getViewTreeObserver();

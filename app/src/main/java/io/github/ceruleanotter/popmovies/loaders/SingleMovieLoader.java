@@ -1,4 +1,4 @@
-package io.github.ceruleanotter.popmovies;
+package io.github.ceruleanotter.popmovies.loaders;
 
 /**
  * Created by lyla on 6/5/15.
@@ -10,6 +10,7 @@ import android.util.Log;
 import java.net.URL;
 
 import io.github.ceruleanotter.popmovies.model.PopMovie;
+import io.github.ceruleanotter.popmovies.ui.MovieDetailFragment;
 import io.github.ceruleanotter.popmovies.utils.MovieDataParsingUtilities;
 
 /**

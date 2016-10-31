@@ -1,7 +1,9 @@
-package io.github.ceruleanotter.popmovies;
+package io.github.ceruleanotter.popmovies.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import io.github.ceruleanotter.popmovies.R;
 
 
 public class MovieDetailActivity extends AppCompatActivity {
