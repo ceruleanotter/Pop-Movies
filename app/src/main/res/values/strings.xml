@@ -5,5 +5,5 @@
     <string name="title_activity_movie_detail">MovieDetail</string>
 
     <!-- Vungle toast message -->
-    <string name="toast_watch_vungle">If you\'d like to see the trailer, please finish watching the add</string>
+    <string name="toast_watch_vungle">If you\'d like to see the trailer, please finish watching the advertisement.</string>
 </resources>

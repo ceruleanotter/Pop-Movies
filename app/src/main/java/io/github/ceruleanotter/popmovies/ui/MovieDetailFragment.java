@@ -1,5 +1,6 @@
 package io.github.ceruleanotter.popmovies.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -254,7 +255,14 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         if (wasSuccessfulView) {
             startActivity(new Intent(Intent.ACTION_VIEW, mTrailerToView));
         } else {
-            Toast.makeText(this.getContext(), R.string.toast_watch_vungle, Toast.LENGTH_LONG).show();
+            final Activity detailActivity = this.getActivity();
+            // Make the toast on the UI thread
+            detailActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(detailActivity, R.string.toast_watch_vungle, Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 
